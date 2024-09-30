@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+    <!-- link employee css -->
+    <link rel="stylesheet" href="resources/css/tourpackage.css">
+
+    <!-- link employee js -->
+    <script src="controllerJS/tourpackage.js"></script>
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <!-- modal buttons starts -->
+        <div class="row mt-2">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary modal-btn " data-bs-toggle="modal"
+                    data-bs-target="#modalAddTP">
+                    Tour pkg Management Form </button>
+            </div>
+        </div>
+
+        <!-- 3 buttons starts -->
+        <div class="row ">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div id="divModify" class=" d-none float-end">
+                    <button type="button" id="btnEdit" onclick="tpFormRefill(window['editOb'], window['editRow']);"
+                        class="btn btn-edit" style="pointer-events: all;">Edit</button>
+
+                    <button type="button" id="btnDelete" onclick="deleteTP(window['editOb'], window['editRow'])"
+                        class="btn btn-delete" style="pointer-events: all;">Delete</button>
+
+                    <button type="button" id="btnView" onclick="viewTP(window['editOb'], window['editRow'])"
+                        class="btn btn-print" style="pointer-events: all;">View</button>
+                </div>
+            </div>
+
+            <div class="col-1"></div>
+
+        </div>
+
+        <!-- table area starts -->
+        <div class="row mt-2 ">
+
+            <div class="col-10 mx-auto">
+                <div class="card card-body bg-info bg-opacity-25 mx-auto ">
+
+                    <!-- table starts -->
+                    <table id="tableTourPkgs" class="table table-bordered table-striped border-warning  ">
+
+                        <thead class="table-primary ">
+
+                            <th class="">No.</th>
+                            <th class="">Package Name</th>
+                            <th class="">code</th>
+                            <th class="">type</th>
+                            <th class="">status</th>
+                            <th class="">Modify</th>
+                        </thead>
+
+                        <tbody class="table-light align-middle">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MODAL STARTS    -->
+        <div id="modalAddTP" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-xl ">
+                <div class="modal-content">
+
+                    <!-- modal header starts -->
+                    <div class="modal-header bg-dark">
+                        <h3 class="text-warning">Tour Packages Creation Form</h3>
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <!-- modal body starts -->
+                    <div class="modal-body bg-light">
+
+                        <!-- form starts -->
+                        <form id="tourPackageForm" onsubmit="return false">
+
+                            <div class="row mt-2">
+                                <div class="col-4">
+
+                                    <label>Package Type: </label>
+
+                                    <!-- RADIO BTN FOR SHOW PKG TYPE -->
+                                    <div class="input-group d-flex mb-2 mx-auto">
+
+                                        <!-- RB 1 -->
+                                        <input type="radio" checked class="btn-check" id="customTP" autocomplete="off"
+                                            name="packageType" onchange="changesDependTypeOri();">
+                                        <label class="btn btn-outline-success rounded-start me-2" for="customTP">Custom
+                                            Package</label>
+
+                                        <!--RB 2  -->
+                                        <input type="radio" class="btn-check" id="forWebSite" disabled
+                                            autocomplete="off" name="packageType" onchange=" changesDependTypeOri(); ">
+                                        <label class="btn btn-outline-primary " for="forWebSite">Show in
+                                            Website</label>
+
+                                    </div>
+                                </div>
+
+                                <!-- based inquiry -->
+                                <div class="col-4" id="basedInqSection">
+                                    <label for="tpkgBasedInquiry" class="form-label mb-0">Based Inquiry: </label>
+                                    <!-- only new and inprogress inqs will display here -->
+                                    <select id="tpkgBasedInquiry" class="form-control form-select mb-2"
+                                        onchange="selectDynamicVal(this, '' , 'tourpkg' , 'basedinquiry'); bindBasedInq(); getDayPlansByGivenInquiry();"></select>
+                                    </select>
+
+                                </div>
+
+                                <!-- pkg code starts -->
+                                <div class="col-4">
+                                    <label for="tpCode" class="form-label mb-0">Code <span><small
+                                                class="text-success">(This
+                                                will be generated automatically)</small></span>
+                                        :</label>
+
+                                    <input id="tpCode" disabled class="form-control form-input"
+                                        onkeyup="inputFieldValidator(this,'','tourPkg','packagecode')">
+                                </div>
+
+                            </div>
+
+                            <!-- PACKAGE TITLE -->
+                            <div class="row mt-2 mb-2 bg-light">
+                                <!-- package title starts -->
+                                <div class="col-8">
+                                    <label for="tpTitle" class="form-label mb-0">Package Title :</label>
+
+                                    <input id="tpTitle" class="form-control form-input"
+                                        onkeyup="inputFieldValidator(this,'','tourpkg','packagename')">
+                                </div>
+                            </div>
+
+                            <div class="row mt-2 mx-auto">
+                                <!-- day plans -->
+                                <div id="pkgDaysContainerId" class="col-8 mt-2 border border-info py-2">
+
+                                    <!-- start day -->
+                                    <div class="row mt-1">
+                                        <div class="col-2 my-auto">
+                                            <label for="tpStartDaySelect" class="form-label">First Day :</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <select disabled id="tpStartDaySelect" class="form-control form-select"
+                                                onchange=" calcTotalDayCount(); selectDynamicVal(this, '' , 'tourpkg' , 'sd_dayplan_id'); showStartDayBtn.disabled=false; addNewDaysBtn.disabled=false;
+                                        tpEndDaySelect.disabled=false; calcTotalDayCount(); "></select>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <button type="button" disabled id="showStartDayBtn"
+                                                class="btn btn-all btn-add"
+                                                onclick="showDayInfoModal(this.parentNode.parentNode.children[1].children[0].value);  ">
+                                                👁
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- mid days -->
+                                    <div class="section mt-2" id="tpNormLDayPlansSelectSection">
+                                        <!-- this section will be generated automatically -->
+                                    </div>
+
+                                    <!--a btn to add day plans -->
+                                    <div class="row mt-2 w-25 mx-auto">
+                                        <button disabled type="button" id="addNewDaysBtn" class="btn btn-warning"
+                                            onclick="generateNormalDayPlanSelectors()">Add More New Days</button>
+                                    </div>
+
+                                    <!-- end day -->
+                                    <div class="row mt-2 ">
+                                        <div class="col-2 my-auto">
+                                            <label for="tpEndDaySelect" class="form-label">Last Day :</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <select disabled id="tpEndDaySelect" class="form-control form-select mb-2"
+                                                onchange=" selectDynamicVal(this, '' , 'tourpkg' , 'ed_dayplan_id'); showEndDayBtn.disabled=false; calcTotalDayCount(); "></select>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <button disabled type="button" id="showEndDayBtn"
+                                                class="btn btn-all btn-add"
+                                                onclick="showDayInfoModal(this.parentNode.parentNode.children[1].children[0].value);">👁
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- dates -->
+                                <div class="col-4 my-auto " id="datesSection">
+                                    <div class="row mt-1">
+                                        <div class="col-5 my-auto">
+                                            <label for="tpStartDateInput" class="form-label mb-1">Tour Start Date
+                                                :</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <input type="date" class="form-control" id="tpStartDateInput"
+                                                onchange="inputFieldValidator(this, '' ,'tourpkg' , 'tourstartdate');tpStartDaySelect.disabled=false; "
+                                                onkeydown="return false">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        <div class="row ">
+                                            <div class="col-9 my-2">Days count: </div>
+                                            <div class="col-3 ">
+                                                <!-- <p id="showTotalDaysCount" class="text-primary fw-bold my-2"></p> -->
+                                                <input disabled type="number" class="form-control"
+                                                    id="showTotalDaysCount" oninput="calcEndDate();">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        <div class="col-5 my-auto">
+                                            <label for="tpEndDateInput" class="form-label mb-1">Tour End Date
+                                                :</label>
+                                        </div>
+                                        <div class="col-7">
+                                            <input disabled type="date" class="form-control" id="tpEndDateInput"
+                                                oninput="inputFieldValidator(this, '' ,'tourpkg' , 'tourenddate'); checkInternalDriverAvailability(); checkInternalGuideAvailability();">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- description, only visible when "forWebSite" selected -->
+                                <div class="col-4 d-none" id="tpDescRow">
+                                    <label for="tpDescription" class="form-label mb-1">Short Description :</label>
+
+                                    <textarea class="form-control" placeholder=" Short Description For Show In WebSite"
+                                        id="tpDescription"
+                                        onkeyup="inputFieldValidator(this,'','tourpkg','description')"
+                                        style="height: 100px;"></textarea>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-2 mx-auto" id="numberOfTravellersSection">
+                                <div class="col-8  p-1 border border-warning p-2">
+                                    <h5 class="text-info border-bottom">Number of Travellers</h5>
+
+                                    <div class="row mt-1">
+                                        <!-- local adults count -->
+                                        <div class="col-3">
+                                            <label for="tpkgLocalAdultCount" class="form-label mb-0">Local Adults
+                                                Count:</label>
+                                            <input type="number" value="0" class="form-control" id="tpkgLocalAdultCount"
+                                                onkeyup="inputFieldValidator(this, '^[1-9]{1,3}$' ,'tourpkg' , 'localadultcount');  enableChildCountInputs(); ">
+                                        </div>
+
+                                        <div class="col-3">
+                                            <!-- local children count -->
+                                            <label for="tpkgLocalChildCount" class="form-label mb-0">Local Child
+                                                Count:</label>
+                                            <input type="number" value="0" class="form-control" id="tpkgLocalChildCount"
+                                                disabled=""
+                                                onchange="inputFieldValidator(this, '^[1-9]{1,3}$' ,'tourpkg' , 'localchildcount');  ">
+                                        </div>
+
+                                        <div class="col-3">
+                                            <!-- foreign adults count -->
+                                            <label for="tpkgForeignAdultCount" class="form-label mb-0">Foreign Adult
+                                                Count:</label>
+                                            <input type="number" value="0" class="form-control"
+                                                id="tpkgForeignAdultCount"
+                                                onkeyup="inputFieldValidator(this, '^[1-9]{1,3}$' ,'tourpkg' , 'foreignadultcount');  enableChildCountInputs(); ">
+                                        </div>
+
+                                        <div class="col-3">
+                                            <!-- foreign children count -->
+                                            <label for="tpkgForeignChildCount" class="form-label mb-0">Foreign Child
+                                                Count:</label>
+                                            <input type="number" disabled="" value="0" class="form-control"
+                                                id="tpkgForeignChildCount"
+                                                onchange="inputFieldValidator(this, '^[1-9]{1,3}$' ,'tourpkg' , 'foreignchildcount'); ">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- check availability -->
+                            <div class="row mt-4 mx-auto border border-info p-1 " id="checkAvailabilitySection">
+                                <h4 class="my-0 border-bottom border-info">Check Resources Availability</h4>
+
+                                <div class="row mt-2">
+                                    <div class="col-4 text-center text-primary fw-bold" style="width:33.3%">Vehicle
+                                    </div>
+                                    <div class="col-4 text-center text-primary fw-bold" style="width:32.3%">Driver</div>
+                                    <div class="col-4 text-center text-primary fw-bold" style="width:33.3%">Guide</div>
+                                </div>
+
+                                <!-- vehicle -->
+                                <div class="col-4 border border-success px-2 pb-2" style="width:33.3%">
+                                    <div class="row mt-2 ">
+                                        <!-- preferred vehi type -->
+                                        <div class="col-4 my-auto">
+                                            <label for="tpkgVehitype" class="form-label mb-0">Vehicle Type :</label>
+                                        </div>
+                                        <div class="col-8 my-auto">
+                                            <select id="tpkgVehitype" class="form-control form-select mb-2"
+                                                onchange="selectDynamicVal(this, '' , 'tourpkg' , 'vehicletype'); checkCompanyVehiAvailability(); "></select>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- available vehicles -->
+                                    <div class="row mt-1">
+                                        <div class="col-4">
+                                            <label class="form-label mb-0">Availablity
+                                                :</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p><span class="text-primary fw-bold" id="showAvailableVehiList"> </span>
+                                                Vehicle(s) Available</p>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- 2 checkboxes -->
+                                    <div class="row mt-1">
+                                        <div class="input-group my-auto">
+                                            <!-- CB 1 -->
+                                            <input type="radio" class="btn-check" id="yathraVehiCB" autocomplete="off"
+                                                name="bookingVehiSource" value="companyOwn" onchange="">
+
+                                            <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                for="yathraVehiCB" style="width:45%">
+                                                Use Company Vehicle
+                                            </label>
+
+                                            <!--CB 2  -->
+                                            <input type="radio" class="btn-check" id="rentalVehiCB" autocomplete="off"
+                                                name="bookingVehiSource" value="rental" onchange="">
+
+                                            <label class="ms-1 btn btn- btn btn-outline-warning " for="rentalVehiCB"
+                                                style="width:45%">Use Rental Service's Vehicle
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- vehicle col ends-->
+
+                                <!-- driver -->
+                                <div class="col-4 border border-success ms-1 me-1" style="width:32.3%">
+
+                                    <!-- available drivers -->
+                                    <div class="row mt-1">
+                                        <div class="col-4">
+                                            <label class="form-label mb-0">Availablity
+                                                :</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <!-- <p id="availableDriverList" class="text-primary"> test</p> -->
+                                            <p><span class="text-primary fw-bold" id="showAvailableDriverList"> </span>
+                                                Driver(s)
+                                                Available</p>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- 2 checkboxes -->
+                                    <div class="row mt-1">
+                                        <div class="input-group my-auto">
+                                            <!-- CB 1 -->
+                                            <input type="radio" class="btn-check" id="yathraDriverCB" autocomplete="off"
+                                                name="bookingDriverSource" value="companyOwn" onchange="">
+
+                                            <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                for="yathraDriverCB" style="width:45%">
+                                                Use Company Driver
+                                            </label>
+
+                                            <!--CB 2  -->
+                                            <input type="radio" class="btn-check" id="rentalDriverCB" autocomplete="off"
+                                                name="bookingDriverSource" value="rental" onchange="">
+
+                                            <label class="ms-1 btn btn- btn btn-outline-warning " for="rentalDriverCB"
+                                                style="width:45%">Use External Driver
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- driver col ends-->
+
+                                <!-- guide -->
+                                <div class="col-4 border border-success ms-1 " style="width:33.3%">
+
+                                    <!-- available guides -->
+                                    <div class="row mt-1">
+                                        <div class="col-4">
+                                            <label class="form-label mb-0">Availablity
+                                                :</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <p><span class="text-primary fw-bold" id="showAvailableGuideList"> </span>
+                                                Gudie(s)
+                                                Available</p>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- guide need or not -->
+                                    <div class="row mt-1">
+                                        <div class="input-group my-auto">
+                                            <!-- CB 1 -->
+                                            <input type="radio" class="btn-check" id="guideYesCB" autocomplete="off"
+                                                name="bookingGuideYesOrNo" value="guideYes"
+                                                onchange="guideSourceSectionID.classList.remove('d-none');">
+
+                                            <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                for="guideYesCB" style="width:45%">
+                                                Include a Guide
+                                            </label>
+
+                                            <!--CB 2  -->
+                                            <input type="radio" class="btn-check" id="guideNoCB" autocomplete="off"
+                                                name="bookingGuideYesOrNo" value="guideNo"
+                                                onchange="guideSourceSectionID.classList.add('d-none')">
+
+                                            <label class="ms-1 btn btn- btn btn-outline-warning " for="guideNoCB"
+                                                style="width:45%">Guide Not Included
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- guide source starts -->
+                                    <div class="row mt-1 d-none" id="guideSourceSectionID">
+                                        <div class="input-group my-auto">
+                                            <!-- CB 1 -->
+                                            <input type="radio" class="btn-check" id="yathraGuideCB" autocomplete="off"
+                                                name="bookingGuideSource" value="companyOwn" onchange="">
+
+                                            <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                for="yathraGuideCB" style="width:45%">
+                                                Use Company Guide
+                                            </label>
+
+                                            <!--CB 2  -->
+                                            <input type="radio" class="btn-check" id="rentalGuideCB" autocomplete="off"
+                                                name="bookingGuideSource" value="rental" onchange="">
+
+                                            <label class="ms-1 btn btn- btn btn-outline-warning " for="rentalGuideCB"
+                                                style="width:45%">Use External Guide
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- guide source ends -->
+
+
+                                </div>
+                                <!-- guide col ends-->
+                            </div>
+
+                            <!-- accordion for cost related details starts-->
+                            <div class="mb-2 w-100 border accordion accordion-flush mt-2" id="accordionForTPKGCosts">
+
+                                <div class="accordion-item ">
+
+                                    <h5 class="accordion-header">
+                                        <button class="p-1 accordion-button collapsed bg-warning " type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#flushCollapsTPKGCosts"
+                                            aria-expanded="false" aria-controls="flushCollapsTPKGCosts">
+
+                                            <h4 class="text-primary fw-bold"> Package Costs :
+                                                Click to view
+                                            </h4>
+                                        </button>
+                                    </h5>
+
+                                    <div id="flushCollapsTPKGCosts" class="accordion-collapse collapse show"
+                                        data-bs-parent="#accordionForTPKGCosts">
+
+                                        <!-- acc body starts -->
+                                        <div class="accordion-body bg-light">
+
+                                            <!-- main row -->
+                                            <div class="row mt-1 p-1">
+
+                                                <!-- calc additional costs col-5-->
+                                                <div class="col-5 border border-info mt-2">
+                                                    <div class="row mt-1">
+                                                        <h4 class="my-0 border-bottom border-info">Additional Costs</h4>
+                                                    </div>
+                                                    <!-- 1 wb cost row-->
+                                                    <div class="row mt-1">
+                                                        <div class="col-6">
+                                                            <label class="form-label mb-0 " for="singleWBCost">1
+                                                                WaterBottle Cost :</label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input type="number" id="singleWBCost"
+                                                                    class="form-control form-input "
+                                                                    onkeyup="dailyWBCount.disabled=false; inputFieldValidator(this,'','tourpkg','onewbcost');">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- daily wb allocation -->
+                                                    <div class="row mt-1">
+                                                        <div class="col-6">
+                                                            <label class="form-label mb-0 " for="dailyWBCount">Daily
+                                                                Allocation :</label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input type="number" disabled
+                                                                class="form-control text-center" id="dailyWBCount"
+                                                                onkeyup="calcWBCost();">
+                                                        </div>
+                                                    </div>
+                                                    <!-- final wb cost -->
+                                                    <div class="row mt-1 pb-2 border-bottom border-primary">
+                                                        <div class="col-6">
+                                                            <label class="form-label mb-0 " for="totalWBCost">Total
+                                                                WaterBottle Cost :</label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="totalWBCost"
+                                                                    class="form-control form-input " onchange="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- other costs -->
+                                                    <div class="row mt-2">
+                                                        <div class="col-6">
+                                                            <label class="form-label mb-0 "
+                                                                for="additionalCostsInput">Any
+                                                                Other Costs(Total) :</label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input type="number" value="0.00"
+                                                                    id="additionalCostsInput"
+                                                                    class="form-control form-input "
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','othercosts'); additionalCostsReason.disabled=false;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- reason -->
+                                                    <div class="row mt-1">
+                                                        <div class="col-12">
+                                                            <label class="form-label mb-0 "
+                                                                for="additionalCostsReason">Please Specify The Nature Of
+                                                                Above Costs :</label>
+                                                            <textarea disabled class="form-control mb-2" placeholder=" "
+                                                                id="additionalCostsReason"
+                                                                onkeyup="inputFieldValidator(this,'','tourpkg','othercostreason')"
+                                                                style="height: 100px;"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- calc additional costs ends col-5-->
+
+                                                <!-- other main costs starts col-7-->
+                                                <div class="col-7">
+
+                                                    <!-- 1st row starts -->
+                                                    <div class="row mt-1">
+
+                                                        <!-- total tkt cost for all -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 "
+                                                                for="totalTktCostInput">Total
+                                                                Ticket
+                                                                Cost</label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="text" id="totalTktCostInput"
+                                                                    class="form-control form-input p-1"
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','totaltktcostforall');">
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- total v parking cost for all -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 "
+                                                                for="totalVehicleParkingCost">Total
+                                                                Parking
+                                                                Cost</label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number"
+                                                                    id="totalVehicleParkingCost"
+                                                                    class="form-control form-input p-1"
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','totalvehiparkingcost');">
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- total lunch cost for all -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0"
+                                                                for="totalLunchCostForAll">Total
+                                                                Lunch
+                                                                Cost</label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="totalLunchCostForAll"
+                                                                    class="form-control form-input p-1"
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','totallunchcost');">
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- 1st row ends -->
+
+                                                    <!-- 2nd row -->
+                                                    <div class="row mt-2">
+
+                                                        <!-- total Vehicle cost for all -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 " for="totalVehiCost">Total
+                                                                Vehicle
+                                                                Cost</label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="totalVehiCost"
+                                                                    class="form-control form-input p-1"
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','totalvehiclecost'); ">
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- accomodation cost -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0" for="totalStayCostInput">
+                                                                Accomodations
+                                                                Cost</label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="totalStayCostInput"
+                                                                    class="form-control form-input p-1"
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','totalstaycost')">
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- additional costs -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 "
+                                                                for="totalAdditionalCosts">Additional Costs
+                                                            </label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="totalAdditionalCosts"
+                                                                    class="form-control form-input p-1"
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','totaladditionalcosts')">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- 2nd row ends-->
+
+                                                    <!-- row 3 -->
+                                                    <div class="row mt-5">
+
+                                                        <!-- discount % -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 fw-bold text-success"
+                                                                for="pkgDiscountPrec">
+                                                                Discount:
+                                                            </label>
+                                                            <select class="form-select" id="pkgDiscountPrec"
+                                                                onchange="selectStaticVal(this, '', 'tourpkg', 'discountprec'); ">
+                                                                <option selected value="0%">No Discount</option>
+                                                                <option value="5%">5 %</option>
+                                                                <option value="10%">10 %</option>
+
+                                                            </select>
+                                                        </div>
+
+
+
+                                                        <!-- button -->
+                                                        <div class="col-4 my-auto">
+                                                            <button class="btn btn-outline-success w-100 mx-auto"
+                                                                id="calcCostsButton" onclick="calcAllCosts();">Calculate
+                                                            </button>
+                                                        </div>
+                                                        <!-- button ends -->
+
+                                                        <div class="col-4">
+
+                                                        </div>
+
+
+
+                                                    </div>
+                                                    <!-- row 3 ends-->
+
+                                                    <!-- discount row starts -->
+                                                    <div class="row mt-5">
+                                                        <div class="col-8"></div>
+
+                                                        <!-- final pkg cost for all -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 text-danger"
+                                                                for="pkgFinalCostInput">Package
+                                                                Total
+                                                                Cost</label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="pkgFinalCostInput"
+                                                                    class="form-control form-input p-1 "
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','pkgtotalcost')">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- discount row ends -->
+
+                                                    <!-- row 4 -->
+                                                    <div class="row mt-5">
+                                                        <div class="col-4"></div>
+                                                        <div class="col-4">
+
+                                                            <label class="form-label mb-0 fw-bold text-primary"
+                                                                for="pkgAdvance">
+                                                                Advance Amount :
+                                                            </label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="pkgAdvance"
+                                                                    class="form-control form-input p-1 "
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','advanceamount')">
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- final price -->
+                                                        <div class="col-4">
+                                                            <label class="form-label mb-0 fw-bold text-primary"
+                                                                for="pkgFinalPrice">
+                                                                Package Final Price
+                                                            </label>
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text p-1 pb-0">
+                                                                    <h6>LKR</h6>
+                                                                </span>
+                                                                <input disabled type="number" id="pkgFinalPrice"
+                                                                    class="form-control form-input p-1 "
+                                                                    onchange="inputFieldValidator(this,'','tourpkg','pkgprice')">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- row 4 ends-->
+
+
+                                                </div>
+                                                <!-- other main costs ends col-7-->
+                                            </div>
+                                            <!-- main row ends-->
+                                        </div>
+                                        <!-- acc body ends -->
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- accordion for cost related details ends-->
+
+                            <!-- PKG NOTE  -->
+                            <div class="row mt-2">
+
+                                <div class="col-6">
+                                    <label for="tpNote" class="form-label mb-1">Note :</label>
+
+                                    <textarea class="form-control" placeholder=" " id="tpNote"
+                                        onkeyup="inputFieldValidator(this,'','tourpkg','note')"
+                                        style="height: 100px;"></textarea>
+                                </div>
+
+                                <div class="col-3"></div>
+
+                                <!-- PKG STATUS -->
+                                <div class="col-3">
+                                    <label for="tpSelectStatus" class="form-label mb-1">Status :</label>
+                                    <select id="tpSelectStatus" class="form-control form-select mb-2"
+                                        onchange="selectDynamicVal(this, '' , 'tourpkg' , 'tourpackagestatus_id')"></select>
+                                </div>
+
+                            </div>
+
+                            <!-- select images row -->
+                            <div class="row mt-4 g-3 text-center d-none" id="imageAddSection">
+
+                                <!-- Cover Photo -->
+                                <div class="col-lg-3 col-md-6 col-sm-12">
+                                    <div class="card p-3">
+                                        <img src="resources/images/sigiriya.jpg" alt="alternative image"
+                                            class="img-thumbnail rounded-circle mx-auto d-block mb-3"
+                                            style="width: 100px; height: 100px;" id="imgPreview1">
+
+                                        <input type="file" class="d-none" id="fileImg1"
+                                            onchange="imgValidatorfortpkg(this,'tourpkg','img1',imgPreview1)">
+
+                                        <button type="button" class="btn btn-primary btn-sm w-100 mb-2"
+                                            onclick="fileImg1.click();">Select Cover Image</button>
+
+                                        <button type="button" class="btn btn-warning btn-sm w-100"
+                                            onclick="clearImg('img1', imgPreview1)">Clear</button>
+                                    </div>
+                                </div>
+
+                                <!-- Image 2 -->
+                                <div class="col-lg-3 col-md-6 col-sm-12">
+                                    <div class="card p-3">
+                                        <img src="resources/images/sigiriya.jpg" alt="alternative image"
+                                            class="img-thumbnail rounded-circle mx-auto d-block mb-3"
+                                            style="width: 100px; height: 100px;" id="imgPreview2">
+
+                                        <input type="file" class="d-none" id="fileImg2"
+                                            onchange="imgValidatorfortpkg(this,'tourpkg','img2',imgPreview2)">
+
+                                        <button type="button" class="btn btn-info btn-sm w-100 mb-2"
+                                            onclick="fileImg2.click();">Select Image 2</button>
+
+                                        <button type="button" class="btn btn-warning btn-sm w-100"
+                                            onclick="clearImg('img2', imgPreview2)">Clear</button>
+                                    </div>
+                                </div>
+
+                                <!-- Image 3 -->
+                                <div class="col-lg-3 col-md-6 col-sm-12">
+                                    <div class="card p-3">
+                                        <img src="resources/images/sigiriya.jpg" alt="alternative image"
+                                            class="img-thumbnail rounded-circle mx-auto d-block mb-3"
+                                            style="width: 100px; height: 100px;" id="imgPreview3">
+                                        <input type="file" class="d-none" id="fileImg3"
+                                            onchange="imgValidatorfortpkg(this,'tourpkg','img3',imgPreview3)">
+                                        <button type="button" class="btn btn-info btn-sm w-100 mb-2"
+                                            onclick="fileImg3.click();">Select Image 3</button>
+                                        <button type="button" class="btn btn-warning btn-sm w-100"
+                                            onclick="clearImg('img3', imgPreview3)">Clear</button>
+                                    </div>
+                                </div>
+
+                                <!-- Image 4 -->
+                                <div class="col-lg-3 col-md-6 col-sm-12">
+                                    <div class="card p-3">
+                                        <img src="resources/images/sigiriya.jpg" alt="alternative image"
+                                            class="img-thumbnail rounded-circle mx-auto d-block mb-3"
+                                            style="width: 100px; height: 100px;" id="imgPreview4">
+                                        <input type="file" class="d-none" id="fileImg4"
+                                            onchange="imgValidatorfortpkg(this,'tourpkg','img4',imgPreview4)">
+                                        <button type="button" class="btn btn-info btn-sm w-100 mb-2"
+                                            onclick="fileImg4.click();">Select Image 4</button>
+                                        <button type="button" class="btn btn-warning btn-sm w-100"
+                                            onclick="clearImg('img4', imgPreview4)">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--3 form buttons starts -->
+                            <div class="row mt-3">
+
+                                <div class="col-3">
+                                    <button type="reset" class="btn btn-all btn-clear" onclick=""> Clear</button>
+                                </div>
+
+                                <div class="col-9 text-end">
+                                    <button type="button" id="tpUpdateBtn" class="btn btn-all btn-update "
+                                        onclick="updateTPkg();" style="pointer-events: all;">Update</button>
+
+                                    <button type="submit" id="tpAddBtn" class="btn btn-all btn-add "
+                                        onclick="addTourPkg()" style="pointer-events: all;">Add</button>
+
+                                </div>
+                            </div>
+
+                            <!-- reusable modal for display pkg details -->
+                            <div class="modal fade" id="reusableModalToShowDayInfo" data-bs-backdrop="static"
+                                data-bs-keyboard="false">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content bg-warning">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header p-2 bg-primary text-white">
+                                            <h5 class="modal-title">Day Info</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body p-3">
+                                            <p class="mb-2"><strong>Day Title:</strong> <span id="dpName"></span></p>
+                                            <p class="mb-2"><strong>Start Location:</strong> <span
+                                                    id="dpStartLoc"></span></p>
+
+                                            <div class="mb-2">
+                                                <strong>Visiting Places:</strong>
+                                                <ul id="dpVplacesList" class="list-unstyled mt-1 mb-0"></ul>
+                                            </div>
+
+                                            <p class="mb-2"><strong>End Location:</strong> <span id="dpEndLoc"></span>
+                                            </p>
+                                            <p class="mb-0"><strong>Note:</strong> <span id="dpNote"></span></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- reusable modal for display pkg details -->
+                            <!-- <div class="modal fade" id="reusableModalToShowDayInfo" data-bs-backdrop="static"
+                                data-bs-keyboard="false">
+                                <div class="modal-dialog modal-sm" style="width: 350px;">
+                                    <div class="modal-content  d-flex justify-content-center align-items-center">
+
+                                        <div class="modal-header p-1">
+                                            <h2> day info</h2>
+
+                                            <button type="button" class="btn-close ms-3"
+                                                data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <p>Day Title : <span id="dpName"></span></p>
+                                            <p>Start Location : <span id="dpStartLoc"></span></p>
+
+                                            <div class="row mx-auto">
+                                                <div class="col-3">Visiting Places :</div>
+                                                <div class="col-9 mx-auto" id="dpVplacesList"></div>
+                                            </div>
+
+                                            <p>End Location : <span id="dpEndLoc"></span></p>
+                                            <p>Note: <span id="dpNote"></span></p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- print -->
+        <!-- view tour package start -->
+
+        <div class="modal" id="tourPackageViewModal" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <img class="ico" src="resources/images/yathra_logo.ico" alt="logo">
+                        <h1 class="modal-title text-info" style="margin-left: 35px;"> Tour Package Details </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            style="margin-bottom: 80px;"></button>
+                    </div>
+                    <div class="modal-body div-form">
+                        <table id="printTourPackageTable"
+                            class="table table-hover table-bordered border-info table-info table-striped">
+
+                            <tr>
+                                <th>Package Name : </th>
+                                <td id="viewPName" colspan="2"></td>
+
+                                <th>Package Code : </th>
+                                <td id="viewPCode" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th>Start Date : </th>
+                                <td id="viewSDate" colspan="2"></td>
+
+                                <th>End Date : </th>
+                                <td id="viewEDate" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th>Total Count : </th>
+                                <td id="viewTCount" colspan="2"></td>
+
+                                <th>Description : </th>
+                                <td id="viewDescri" colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th>Total Price : </th>
+                                <td id="viewTPrice" colspan="2"></td>
+
+                                <th>Added date : </th>
+                                <td id="viewAddDate" colspan="2"></td>
+
+                            </tr>
+
+                            <tr>
+                                <th>Note: </th>
+                                <td id="viewNote" colspan="4"></td>
+
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" onclick="btnPrintRow();">print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- view tour package end -->
+
+    </main>
+</body>
+
+
+</html>

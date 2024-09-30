@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+    <!-- link main css -->
+    <link rel="stylesheet" href="resources/css/privilege.css">
+
+    <!-- link main js -->
+    <script src="controllerJS/privilege.js"></script>
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <div class="container-fluid main">
+
+            <!-- title starts -->
+            <div class="row p-2">
+                <div class="col-12 text-center bg-primary">
+                    <h2>Privilege Management</h2>
+                </div>
+            </div>
+
+            <!-- canvas btn starts -->
+            <div class="row mt-2">
+                <div class="d-flex justify-content-center">
+                    <button class="btn modal-btn" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasPrv" aria-controls="offcanvasPrv">
+                        Manage Privileges
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3 buttons starts -->
+            <div class="row">
+                <div class="col-1"></div>
+
+                <div class="col-10 float-end">
+                    <div id="divModify" class=" d-none ">
+                        <button type="button" id="btnEdit" style="pointer-events: all;"
+                            onclick="editPriv(window['editOb'], window['editRow'])" class="btn btn-edit">Edit</button>
+                        <button type="button" id="btnDelete" style="pointer-events: all;"
+                            onclick="deletePrivi(window['editOb'], window['editRow'])"
+                            class="btn btn-delete">Delete</button>
+                        <button type="button" id="btnPrint" style="pointer-events: all;"
+                            onclick="printPrivi(window['editOb'], window['editRow'])"
+                            class="btn btn-print">Print</button>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+
+            <!-- inside the canvas starts -->
+            <div class="offcanvas offcanvas-start" tabindex="1" id="offcanvasPrv" aria-labelledby="offcanvasLeftLabel"
+                data-bs-backdrop="static" style="width: 460px;">
+
+                <!-- canvas header starts -->
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasLeftLabel">
+                        Permissions
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
+                        onclick="window.location.reload()"></button>
+                </div>
+
+                <!-- canvas body starts -->
+                <div class="offcanvas-body ">
+
+                    <!-- privilege form starts -->
+                    <form id="formPrivilege" onsubmit="return false">
+
+                        <!-- select ROLE starts -->
+                        <div class="row mt-2">
+                            <label for="selectRole" class="col-4 col-form-label fw-bold">Role:</label>
+                            <div class="col-8">
+                                <select name="" id="selectRole" class="form-select" required
+                                    onchange="selectDynamicVal(this, '' , 'privilege', 'role'); generateModuleList(); "></select>
+                            </div>
+                        </div>
+
+                        <!--select MODULE starts -->
+                        <div class="row mt-2">
+                            <label for="selectModule" class="col-4 col-form-label fw-bold">Module :</label>
+                            <div class="col-8">
+                                <select name="" id="selectModule" class="form-select" required
+                                    onchange="selectDynamicVal(this, '' , 'privilege', 'module' );  "></select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+
+                            <!-- start SELECT privilege -->
+                            <div class="row mt-2">
+                                <label class="col-4 col-form-label fw-bold"> SELECT : </label>
+                                <div class="col-8">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="selectSwitch"
+                                            onchange="checkPrivi(selectSwitch, 'privilege' , 'privselect',true, false, labelSel,'Select')">
+                                        <label class="form-check-label" for="selectSwitch" id="labelSel">Select
+                                            Privilege
+                                            Not Granted</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- start INSERT privilege -->
+                            <div class="row mt-2">
+                                <label class="col-4 col-form-label fw-bold"> INSERT : </label>
+                                <div class="col-8">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="insertSwitch"
+                                            onchange="checkPrivi(insertSwitch, 'privilege' , 'privinsert',true, false, labelInsert,'Insert')">
+                                        <label class="form-check-label" for="insertSwitch" id="labelInsert">Insert
+                                            Privilege
+                                            Not Granted</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- start UPDATE privilege -->
+                            <div class="row mt-2">
+                                <label class="col-4 col-form-label fw-bold"> UPDATE : </label>
+                                <div class="col-8">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="updateSwitch"
+                                            onchange="checkPrivi(updateSwitch, 'privilege' , 'privupdate',true, false, labelUpdate,'Update')">
+                                        <label class="form-check-label" for="updateSwitch" id="labelUpdate">Insert
+                                            Privilege
+                                            Not Granted</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- start DELETE privilege -->
+                            <div class="row mt-2">
+                                <label class="col-4 col-form-label fw-bold"> DELETE : </label>
+                                <div class="col-8">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="deleteSwitch"
+                                            onchange="checkPrivi(deleteSwitch, 'privilege' , 'privdelete',true, false, labelDelete,'Delete')">
+                                        <label class="form-check-label" for="deleteSwitch" id="labelDelete">Insert
+                                            Privilege
+                                            Not Granted</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--3 FORM buttons start -->
+                            <div class="row m-2">
+                                <div class="col-4 text-start">
+                                    <button type="reset" class="btn btn-all btn-clear fw-bold"
+                                        onclick="refreshPrivilegeForm()">Clear</button>
+                                </div>
+                                <div class="col-8 text-end">
+                                    <button type="button" id="priviUpdateBtn" class="btn btn-all btn-update fw-bold"
+                                        onclick="updatePrivilege()" style="pointer-events: all;">Update</button>
+
+                                    <button type="submit" id="priviAddBtn" class="btn btn-all btn-add fw-bold"
+                                        onclick="addPrivilege()" style="pointer-events: all;">Add</button>
+                                </div>
+                            </div>
+                    </form>
+                    <!-- privilege form ends -->
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- table area starts -->
+        <div class="row mt-2">
+            <div class="col-1"></div>
+            <div class="col-10">
+
+                <div class="row">
+                    <!-- role  select -->
+                    <!-- <div class="col-3">
+                        <label for="selectRoleForFilter" class="form-label fw-bold">Role:</label>
+                        <select name="" id="selectRoleForFilter" class="form-select"></select>
+
+                    </div> -->
+
+                    <!-- module  select -->
+                    <!-- <div class="col-3">
+                        <label for="selectModuleForFilter" class="form-label fw-bold">Module:</label>
+                        <select name="" id="selectModuleForFilter" class="form-select"></select>
+                    </div> -->
+                </div>
+
+                <div class="card card-body bg-info bg-opacity-25">
+
+                    <!-- table starts -->
+                    <table id="privilegeTable" class="table table-bordered table-striped border-primary">
+                        <thead class="table-primary">
+
+                            <th> # </th>
+                            <th>Role</th>
+                            <th>Module</th>
+                            <th>Select</th>
+                            <th>Insert</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                            <th>Modify</th>
+                        </thead>
+                        <tbody class="table-light">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </main>
+</body>
+
+</html>

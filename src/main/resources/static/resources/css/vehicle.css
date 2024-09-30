@@ -1,0 +1,31 @@
+.status-available{
+    background-color: rgb(15, 236, 15) ;
+    text-align: center;
+    padding: 2px;
+    border-radius: 5px;
+    color: white;
+}
+
+.status-action{
+    background-color: blue ;
+    text-align: center;
+    padding: 2px;
+    border-radius: 5px;
+    color: white;
+}
+
+.status-maintenance{
+    background-color: rgb(241, 161, 10);
+    text-align: center;
+    padding: 2px;
+    border-radius: 5px;
+    color: white;
+}
+
+.status-out{
+    background-color: red;
+    text-align: center;
+    padding: 2px;
+    border-radius: 5px;
+    color: white;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+
+    <script src="controllerJS/reportshowpaymentsum.js"></script>
+
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <div class="container mt-5">
+
+            <!-- heading -->
+            <h2 class="text-center">Payment Summary</h2>
+            <div class="row justify-content-center mt-4">
+
+                <!-- 2 date pickers -->
+                <div class="col-md-3">
+                    <label for="startDatePickerID" class="form-label">Start Date</label>
+                    <input type="date" id="startDatePickerID" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="endDatePickerID" class="form-label">End Date</label>
+                    <input type="date" id="endDatePickerID" class="form-control">
+                </div>
+                <div class="col-md-2 align-self-end">
+                    <!-- <button id="filterBtn" class="btn btn-primary mt-2" onclick="fillTable();">Filter</button> -->
+
+                    <button id="generateReportBtn" class="btn btn-primary mt-4">Generate Report</button>
+
+                </div>
+
+                <!-- <div class="row mb-3">
+                    <div class="col">
+                        <label for="startDatePickerID">Start Date</label>
+                        <input type="date" id="startDatePickerID" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label for="endDatePickerID">End Date</label>
+                        <input type="date" id="endDatePickerID" class="form-control">
+                    </div>
+                    <div class="col">
+                        <button id="generateReportBtn" class="btn btn-primary mt-4">Generate Report</button>
+                    </div>
+                </div> -->
+
+                <table id="paymentReportTable" class="table table-bordered d-none">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Date Range</th>
+                            <th>Received Amount (LKR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="dateRange"></td>
+                            <td id="receivedAmount"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    </main>>
+
+
+</body>
+
+</html>

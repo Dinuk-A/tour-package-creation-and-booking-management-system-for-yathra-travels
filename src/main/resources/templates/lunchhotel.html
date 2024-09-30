@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+
+    <!-- link main css -->
+    <!-- <link rel="stylesheet" href="resources/css/lunchhotel.css"> -->
+
+    <!-- link vehicle js -->
+    <script src="controllerJS/lunchhotel.js"></script>
+
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <div class="row mt-2">
+            <!-- modal btn starts -->
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn modal-btn" data-bs-toggle="modal" data-bs-target="#modalLunchHotel"
+                    area-controls="modalLunchHotel"> Add LH </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div id="divModify" class=" d-none float-end">
+                    <button type="button" id="btnEdit" style="pointer-events: all;"
+                        onclick="refillLunchHotel(window['editOb'], window['editRow'])"
+                        class="btn btn-warning btn-edit">Edit</button>
+
+                    <button type="button" id="btnDelete" style="pointer-events: all;"
+                        onclick="deleteLunchHotel(window['editOb'], window['editRow'])"
+                        class="btn btn-danger btn-delete">Delete</button>
+
+                    <button type="button" id="btnPrint" style="pointer-events: all;"
+                        onclick="printLunchHotel(window['editOb'], window['editRow'])"
+                        class="btn btn-info btn-print">View</button>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="modalLunchHotel" tabindex="-1">
+            <div class="modal-dialog modal-lg" style="min-width: 1000px;">
+                <div class="modal-content border-warning">
+                    <!-- modal header -->
+                    <div class="modal-header bg-dark">
+                        <h3 class="modal-title fw-bold text-warning" id="staticBackdropLabel">Lunch hotel
+                            Management Form</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="window.location.reload();"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container-fluid p-0">
+
+                            <form id="lunchHotelForm" onsubmit="return false">
+                                <div class="row g-3 mb-3">
+
+                                    <!-- Name -->
+                                    <div class="col-md-6">
+                                        <label for="inputLHPlaceName" class="form-label fw-bold">Name:</label>
+                                        <input type="text" id="inputLHPlaceName" class="form-control" required
+                                            onchange="inputFieldValidator(this,'','lunchhotel','name');">
+                                    </div>
+
+                                    <!-- Cost Per Head -->
+                                    <div class="col-md-6">
+                                        <label for="inputCostperHead" class="form-label fw-bold">Cost Per Head:</label>
+                                        <input type="number" id="inputCostperHead" class="form-control" required
+                                            onchange="inputFieldValidator(this,'','lunchhotel','costperhead');">
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+
+                                    <!-- District ID -->
+                                    <div class="col-md-6">
+                                        <label for="selectLHDistrict" class="form-label fw-bold">District ID:</label>
+                                        <select id="selectLHDistrict" class="form-select mb-2"
+                                            onchange="selectDynamicVal(this, '' , 'lunchhotel' , 'district_id')"></select>
+                                    </div>
+
+                                    <!-- Contact Number -->
+                                    <div class="col-md-6">
+                                        <label for="inputContactNum" class="form-label fw-bold">Contact Number:</label>
+                                        <input type="tel" id="inputContactNum" pattern="[0-9]{10}" class="form-control"
+                                            onchange="inputFieldValidator(this,'','lunchhotel','contactnum');">
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <!-- Note -->
+                                    <div class="col-md-12">
+                                        <label for="inputLHNote" class="form-label fw-bold">Note:</label>
+                                        <textarea id="inputLHNote" class="form-control" rows="3"
+                                            onchange="inputFieldValidator(this,'','lunchhotel','note');"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <!-- Address -->
+                                    <div class="col-md-12">
+                                        <label for="inputLHAddress" class="form-label fw-bold">Address:</label>
+                                        <textarea id="inputLHAddress" class="form-control" rows="3"
+                                            onchange="inputFieldValidator(this,'','lunchhotel','address');"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Status (if needed as a select element) -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="lHStatusSelect" class="form-label fw-bold">Status:</label>
+                                        <select id="lHStatusSelect" class="form-select"
+                                            onchange="selectDynamicVal(this, '' , 'lunchhotel' , 'lhotelstts_id');">
+                                            <option value="" selected disabled>Select Status</option>
+                                            <!-- Add more options as necessary -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- form buttons starts -->
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6 text-start">
+                                        <button type="reset" class="btn btn-secondary w-25">Clear</button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" id="lunchHotelUpdateBtn" class="btn btn-warning w-100"
+                                            onclick="updateLHRecord()">Update</button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" id="lunchHotelAddBtn" class="btn btn-primary w-100"
+                                            onclick="addLunchHotel()">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer d-flex justify-content-between"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table area starts -->
+        <div class="row mt-2 ">
+
+            <div class="col-10 mx-auto">
+                <div class="card card-body bg-info bg-opacity-25 mx-auto ">
+
+                    <!-- table starts -->
+                    <table id="lunchHotelMainTable" class="table table-bordered table-striped border-warning  ">
+
+                        <thead class="table-primary ">
+
+                            <th class="">No.</th>
+                            <th class="text-no-wrap">Hotel Name</th>
+                            <th class="">Address</th>
+                            <th class="">contactnum</th>
+                            <th class="">Price (per person)</th>
+                            <th class="">Status</th>
+                            <th class="">Modify</th>
+
+                        </thead>
+
+                        <tbody class="table-light align-middle">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+
+</html>

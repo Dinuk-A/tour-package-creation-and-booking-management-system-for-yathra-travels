@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+    <!-- link employee css -->
+    <!-- <link rel="stylesheet" href="resources/css/booking.css"> -->
+
+    <!-- link employee js -->
+    <script src="controllerJS/booking.js"></script>
+
+</head>
+
+<body>
+
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+
+        <!-- 3 buttons starts -->
+        <div class="row ">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div id="divModify" class=" d-none float-end">
+                    <button type="button" id="btnEdit" onclick="bookingFormReFill(window['editOb'], window['editRow'])"
+                        class="btn btn-edit" style="pointer-events: all;">Edit</button>
+
+                    <button disabled type="button" id="btnDelete"
+                        onclick="deleteBooking(window['editOb'], window['editRow'])" class="btn btn-delete"
+                        style="pointer-events: all;">Delete</button>
+
+                    <button type="button" disabled id="btnPrint"
+                        onclick="printBooking(window['editOb'], window['editRow'])" class="btn btn-print d-none"
+                        style="pointer-events: all;">View</button>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <!-- MAIN MODEL STARTS -->
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="bookingMainModel" tabindex="-1">
+
+            <div class="modal-dialog modal-xl">
+
+                <div class="modal-content">
+
+                    <!-- modal header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Booking Management Form</h5>
+
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container">
+
+                            <form id="bookingMgtForm" onsubmit="return false">
+
+                                <!-- row starts -->
+                                <div class="row mt-1">
+                                    <!-- booking code -->
+                                    <div class="col-3">
+                                        <label for="bookingCodeInput" class="form-label mb-0">Booking Code
+                                            :</label>
+
+                                        <input id="bookingCodeInput" class="form-control form-input" disabled
+                                            onkeyup="inputFieldValidator(this, '', 'booking' , 'bookingcode')">
+                                    </div>
+
+                                    <!-- booked package -->
+                                    <div class="col-5">
+                                        <label for="bookedPackageSelect" class="form-label mb-0">Booked Package
+                                            :</label>
+                                        <select disabled id="bookedPackageSelect" class="form-select"
+                                            onchange="selectDynamicVal(this,'','booking','tourpackage_id')"></select>
+                                    </div>
+
+                                    <div class="col-1"></div>
+
+                                    <!-- based inquiry -->
+                                    <div class="col-3">
+                                        <label for="inquiryOfBookingSelect" class="form-label mb-0">Based Inquiry
+                                            :</label>
+                                        <select disabled id="inquiryOfBookingSelect" class="form-select"
+                                            onchange="selectDynamicVal(this,'','booking','inquiry_id')"></select>
+                                    </div>
+                                </div>
+                                <!-- row ends -->
+
+                                <!-- row 2 starts -->
+                                <div class="row mt-2">
+
+                                    <!-- client name -->
+                                    <div class="col-6">
+                                        <label for="bookingClientNameInput" class="form-label mb-0">Client Name
+                                            :</label>
+
+                                        <input disabled id="bookingClientNameInput" class="form-control form-input">
+                                    </div>
+
+                                    <!-- nationality -->
+                                    <div class="col-3">
+                                        <label for="bookingClientContact" class="form-label mb-0">Contact:
+                                        </label>
+
+                                        <input disabled id="bookingClientContact" class="form-control form-input">
+                                    </div>
+
+                                    <!-- email -->
+                                    <div class="col-3">
+                                        <label for="bookingEmail" class="form-label mb-0">Email:
+                                        </label>
+
+                                        <input disabled id="bookingEmail" class="form-control form-input">
+
+                                    </div>
+
+                                    <!-- <div class="col-4">
+                                        <label for="bookingPassportOrNIC" class="form-label mb-0">Passport or NIC
+                                            :</label>
+
+                                        <input id="bookingPassportOrNIC" class="form-control form-input">
+                                    </div> -->
+
+                                </div>
+                                <!-- row 2 ends -->
+
+                                <!-- row 3 starts -->
+                                <div class="row mt-2">
+
+                                    <!-- total amount -->
+                                    <div class="col-3">
+                                        <label class="form-label mb-0 " for="bookingPkgPrice">
+                                            Package Price :</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <h6>LKR</h6>
+                                            </span>
+                                            <input disabled type="number" id="bookingPkgPrice" class="form-control form-input ">
+                                        </div>
+                                    </div>
+
+                                    <!-- advancement -->
+                                    <div class="col-3">
+                                        <label class="form-label mb-0 " for="bookingAdvancementAmount">
+                                            Advancement Amount :</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <h6>LKR</h6>
+                                            </span>
+                                            <input disabled type="number" id="bookingAdvancementAmount"
+                                                class="form-control form-input ">
+                                        </div>
+                                    </div>
+
+                                    <!-- total paid amount -->
+                                    <div class="col-3">
+                                        <label class="form-label mb-0 " for="bookingTotalPaidAmout">
+                                            Total Paid Amount :</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <h6>LKR</h6>
+                                            </span>
+                                            <input disabled type="number" id="bookingTotalPaidAmout"
+                                                class="form-control form-input ">
+                                        </div>
+                                    </div>
+
+                                    <!-- total balance -->
+                                    <div class="col-3">
+                                        <label class="form-label mb-0 " for="bookingDueBalance">
+                                            Balance :</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <h6>LKR</h6>
+                                            </span>
+                                            <input disabled type="number" id="bookingDueBalance"
+                                                class="form-control form-input ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- row 3 ends -->
+
+                                <!-- dates row -->
+                                <div class="row mt-2">
+
+                                    <!-- start date -->
+                                    <div class="col-3">
+                                        <label for="bookingStartDate" class="form-label fw-bold mb-0">
+                                            Start Date :
+                                        </label>
+                                        <input disabled type="date" class="form-control" id="bookingStartDate"
+                                            onchange="inputFieldValidator(this, '' ,'booking' , 'starrtdate');"
+                                            onkeydown="return false">
+                                            <!--  bookingEndDate.disabled=false; -->
+                                    </div>
+
+                                    <!-- end date -->
+                                    <div class="col-3">
+                                        <label for="bookingEndDate" class="form-label fw-bold mb-0">
+                                            End Date :
+                                        </label>
+                                        <input disabled type="date" class="form-control" id="bookingEndDate"
+                                            onkeydown="return false"
+                                            oninput="inputFieldValidator(this, '' ,'booking' , 'enddate'); getAvailableCompanyDrivers();">
+                                            <!-- ^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$ -->
+                                        <!-- bookingVehitype.disabled=false; availableDriverSelect.disabled=false; availableGuideSelect.disabled=false; -->
+
+                                    </div>
+
+                                    <div class="col-3"></div>
+
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-primary mt-2" onclick="getAvailableCompanyDrivers(); getAvailableGuideList();">
+                                            Get Available Resources
+                                        </button>
+                                    </div>
+
+
+                                </div>
+                                <!-- dates row ends -->
+
+                                <!-- resources assign rows -->
+                                <div class="row mt-4 mx-auto border border-info p-1 " id="checkAvailabilitySection">
+                                    <h4 class="my-0 border-bottom border-info">Assign Vehicle/Driver/Guide</h4>
+
+                                    <div class="row mt-2">
+                                        <div class="col-4 text-center text-primary fw-bold" style="width:33.3%">Vehicle
+                                        </div>
+                                        <div class="col-4 text-center text-primary fw-bold" style="width:32.3%">Driver
+                                        </div>
+                                        <div class="col-4 text-center text-primary fw-bold" style="width:33.3%">Guide
+                                        </div>
+                                    </div>
+
+                                    <!-- vehicle -->
+                                    <div class="col-4 border border-success px-2 pb-2" style="width:33.3%">
+
+                                        <!-- 2 checkboxes -->
+                                        <div class="row mt-1">
+                                            <div class="input-group my-auto" id="vehicleSourceRadioSection">
+                                                <!-- CB 1 -->
+                                                <input type="radio" checked class="btn-check" id="companyOwnVehiRadio"
+                                                    autocomplete="off" name="bookingVehiSource"
+                                                    onchange="changesBasedOnVehicleSource(); ">
+
+                                                <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                    for="companyOwnVehiRadio" style="width:45%">
+                                                    Company Vehicles
+                                                </label>
+
+                                                <!--CB 2  -->
+                                                <input type="radio" class="btn-check" id="rentalVehiRadio"
+                                                    autocomplete="off" name="bookingVehiSource"
+                                                    onchange="changesBasedOnVehicleSource();">
+
+                                                <label class="ms-1 btn btn- btn btn-outline-warning "
+                                                    for="rentalVehiRadio" style="width:45%">Rental Service's Vehicles
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- if from company -->
+                                        <div class="" id="companyVehicleSection">
+                                            <div class="row mt-1 ">
+                                                <!-- preferred vehi type -->
+                                                <div class="col-4 my-auto">
+                                                    <label for="bookingVehitype" class="form-label mb-0">Type
+                                                        :</label>
+                                                </div>
+                                                <!-- available vehi select karana query eka run wenna one meke onchange ekedi 💥💥💥 -->
+                                                <div class="col-8 my-auto">
+                                                    <select id="bookingVehitype" class="form-control form-select mb-2"
+                                                        onchange=" getAvailableCompVehicles(); availableVehicleSelect.disabled=false;"></select>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- available vehicles -->
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <label for="availableVehicleSelect" class="form-label mb-0">Select
+                                                        Vehicle
+                                                        :</label>
+
+                                                    <select id="availableVehicleSelect"
+                                                        class="form-control form-select mb-2"
+                                                        onchange="selectDynamicVal(this, '' , 'booking' , 'vehicle_id');"></select>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- if rental -->
+                                        <div class="row mt-1 pb-2 d-none" id="rentedVehicleSection">
+
+                                            <div class="row mt-1 ">
+                                                <!-- rental vehi type -->
+                                                <div class="col-4 my-auto">
+                                                    <label for="rentalVehitype" class="form-label mb-0">Type
+                                                        :</label>
+                                                </div>
+                                                <div class="col-8 my-auto">
+                                                    <select id="rentalVehitype"
+                                                        class="form-control form-select mb-2"></select>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- select previously rented vehicles -->
+                                            <div class="col-12 mt-1">
+                                                <label for="rentalVehiSelect" class="form-label mb-0">Rented Vehicles
+                                                    :</label>
+
+                                                <select id="rentalVehiSelect" class="form-control form-select mb-2"
+                                                    onkeyup="inputFieldValidator(this, '', booking, 'vehicle_id');"></select>
+                                            </div>
+
+                                            <!-- button to add new rented vehis -->
+                                            <div class="row mt-2" id="rented">
+                                                <div class="col-8 mx-auto">
+                                                    <button type="button" id="addNewRentalVehiModalBtn"
+                                                        class="btn btn-outline-primary" style="pointer-events: all;"
+                                                        data-bs-toggle="modal" data-bs-target="#newRentelVehiModal">Add
+                                                        New Rented
+                                                        Vehicle</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- vehicle col ends-->
+
+                                    <!-- driver -->
+                                    <div class="col-4 border border-success ms-1 me-1" style="width:32.3%">
+
+                                        <!-- 2 checkboxes -->
+                                        <div class="row mt-1">
+                                            <div class="input-group my-auto">
+                                                <!-- CB 1 -->
+                                                <input type="radio" checked class="btn-check" id="companyOwnDriver"
+                                                    autocomplete="off" name="bookingDriverSource"
+                                                    onchange="changesBasedOnDriverSource();">
+
+                                                <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                    for="companyOwnDriver" style="width:45%">
+                                                    Use Company Driver
+                                                </label>
+
+                                                <!--CB 2  -->
+                                                <input type="radio" class="btn-check" id="rentalDriver"
+                                                    autocomplete="off" name="bookingDriverSource"
+                                                    onchange="changesBasedOnDriverSource();">
+
+                                                <label class="ms-1 btn btn- btn btn-outline-warning " for="rentalDriver"
+                                                    style="width:45%">Use External Driver
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- if from company -->
+                                        <!-- available drivers -->
+                                        <div class="row mt-1" id="companyDriverSection">
+                                            <div class="col-12">
+                                                <label for="availableDriverSelect" class="form-label mb-0">Select Driver
+                                                    :</label>
+
+                                                <select id="availableDriverSelect" class="form-control form-select mb-2"
+                                                    onkeyup="inputFieldValidator(this, '', booking, 'driver');"></select>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- if rented -->
+                                        <!-- external driver name -->
+                                        <div class="row mt-1 d-none" id="externalDriverSection">
+                                            <div class="col-12 mt-1">
+                                                <label for="externalDriverSelect" class="form-label mb-0">Previous
+                                                    External Drivers
+                                                    :</label>
+
+                                                <select id="externalDriverSelect" class="form-control form-select mb-2"
+                                                    onchange="selectDynamicVal(this, '', booking, 'external_driver');"></select>
+                                            </div>
+
+                                            <!-- add new driver modal button -->
+                                            <div class="col-8 mt-2 mx-auto">
+                                                <button type="button" id="addNewExternalDriverModalBtn"
+                                                    class="btn btn-outline-primary" style="pointer-events: all;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#newExternalDriverOrGuideModal">Add
+                                                    New External
+                                                    Driver</button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- driver col ends-->
+
+                                    <!-- guide -->
+                                    <div class="col-4 border border-success" style="width:33.3%">
+                                        <!-- 2 checkboxes -->
+                                        <div class="row mt-1">
+                                            <div class="input-group my-auto">
+                                                <!-- CB 1 -->
+                                                <input type="radio" checked class="btn-check" id="companyOwnGuide"
+                                                    autocomplete="off" name="bookingGuideSource"
+                                                    onchange="changesBasedOnGuideSource();">
+
+                                                <label class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                    for="companyOwnGuide" style="width:45%">
+                                                    Use Company Guide
+                                                </label>
+
+                                                <!--CB 2  -->
+                                                <input type="radio" class="btn-check" id="rentalGuides"
+                                                    autocomplete="off" name="bookingGuideSource"
+                                                    onchange="changesBasedOnGuideSource();">
+
+                                                <label class="ms-1 btn btn- btn btn-outline-warning " for="rentalGuides"
+                                                    style="width:45%">Use External Driver
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- if from company -->
+                                        <!-- available guides -->
+                                        <div class="row mt-1" id="companyGuideSection">
+                                            <div class="col-12">
+                                                <label for="availableGuideSelect" class="form-label mb-0">Select Guide
+                                                    :</label>
+
+                                                <select id="availableGuideSelect" class="form-control form-select mb-2"
+                                                    onkeyup="inputFieldValidator(this, '', booking, 'guide');"></select>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- if rented -->
+                                        <!-- external Guide name -->
+                                        <div class="row mt-1 d-none" id="externalGuideSection">
+                                            <div class="col-12 mt-1">
+                                                <label for="externalGuideSelect" class="form-label mb-0">Previous
+                                                    External Guides
+                                                    :</label>
+
+                                                <select id="externalGuideSelect" class="form-control form-select mb-2"
+                                                    onchange="selectDynamicVal(this, '', booking, 'external_guide');"></select>
+                                            </div>
+
+                                            <!-- add new Gudie modal button -->
+                                            <div class="col-8 mt-2 mx-auto">
+                                                <button type="button" id="addNewExternalGuideModalBtn"
+                                                    class="btn btn-outline-primary" style="pointer-events: all;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#newExternalDriverOrGuideModal">Add
+                                                    New External
+                                                    Guide</button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- guide col ends-->
+                                </div>
+                                <!-- resources assign rows ends -->
+
+
+                                <!-- status and note -->
+                                <div class="row mt-2">
+                                    <div class="col-8">
+                                        <label for="bookingNote" class="form-label mb-1">Note :</label>
+
+                                        <textarea class="form-control" placeholder=" " id="bookingNote"
+                                            onkeyup="inputFieldValidator(this,'','booking','note')"
+                                            style="height: 100px;"></textarea>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="bookingStatusSelect" class="form-label mb-1">Status :</label>
+                                        <select id="bookingStatusSelect" class="form-select"
+                                            onchange="selectDynamicVal(this,'','booking','dpstatus_id')"></select>
+                                    </div>
+                                </div>
+
+                                <!--3 form buttons starts -->
+                                <div class="row mt-3">
+
+                                    <div class="col-3">
+                                        <button type="reset" class="btn btn-all btn-clear" onclick=""> Clear</button>
+                                    </div>
+
+                                    <div class="col-9 text-end">
+                                        <button type="button" id="bookingUpdateBtn" class="btn btn-all btn-update "
+                                            onclick="updateBooking();" style="pointer-events: all;">Update</button>
+
+                                        <!-- <button type="submit" id="bookingAddBtn" class="btn btn-all btn-add "
+                                            onclick="addBooking()" style="pointer-events: all;">Add</button> -->
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- table area starts -->
+        <div class="row mt-2">
+            <div class="col-1"></div>
+
+            <!-- table starts -->
+            <div class="col-10">
+                <div class="card card-body bg-info bg-opacity-25">
+                    <table id="bookingMainTable" class="table table-bordered table-striped border-primary ">
+
+                        <thead class="table-primary">
+                            <th>No.</th>
+                            <th>Code</th>
+                            <th>Package</th>
+                            <th>Client</th>
+                            <!-- <th>Dates</th> -->
+                            <!-- <th>Price</th> -->
+                            <th>Status</th>
+                            <th>Modify</th>
+                        </thead>
+                        <tbody class="table-light align-middle">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <!-- modal for add new rental vehicles -->
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="newRentelVehiModal" tabindex="-1">
+
+            <div class="modal-dialog modal-lg">
+
+                <div class="modal-content">
+
+                    <!-- modal header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">New Rental vehicle</h5>
+
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container">
+                            <form id="newRentalVehiMgtform" onsubmit="return false">
+
+                                <div class="row mt-2">
+
+                                    <!-- select vehicle type starts -->
+                                    <div class="col-4">
+                                        <label for="selectVehiType" class="fw-bold">Vehicle Type : </label>
+                                        <select id="selectVehiType" class="form-control form-select"
+                                            onchange="selectDynamicVal(this, '' , 'rentalVehicleObj','vehitype_id');"
+                                            required>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <!-- License number starts -->
+                                <div class="row mt-2">
+                                    <div class="col-6">
+                                        <label for="newRentedVehiNumberPlate" class="fw-bold form-label mb-0"> License
+                                            number :</label>
+                                        <input id="newRentedVehiNumberPlate" type="text" class="form-control form-input"
+                                            onkeyup="inputFieldValidator(this,'','rentalVehicleObj','licencenumber')"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <!-- seating capacity starts -->
+                                <!-- <div class="row mt-2">
+                                    <div class="col-4">
+                                        <label for="intSeatCount" class="fw-bold form-label mb-0"> Seat Count :</label>
+                                        <input id="intSeatCount" type="number" class="form-control form-input "
+                                            onkeyup="inputFieldValidator(this,'','rentalVehicleObj','seatcount')">
+                                    </div>
+
+                                </div> -->
+
+                                <!-- agency/owner info -->
+                                <div class="row mt-2">
+                                    <!-- agency name -->
+                                    <div class="col-6">
+                                        <label for="vehiAgencyName" class="fw-bold form-label mb-0"> Agency Name
+                                            :</label>
+                                        <input id="vehiAgencyName" type="text" class="form-control form-input "
+                                            onkeyup="inputFieldValidator(this,'','rentalVehicleObj','agencyname')">
+                                    </div>
+
+                                    <!-- agency contact -->
+                                    <div class="col-6">
+                                        <label for="vehiAgencyContact" class="fw-bold form-label mb-0"> Agency Contact
+                                            Number :</label>
+                                        <input id="vehiAgencyContact" type="text" class="form-control form-input "
+                                            onkeyup="inputFieldValidator(this,'','rentalVehicleObj','agencycontactnum')">
+                                    </div>
+                                </div>
+
+
+                                <div class="row mt-2">
+                                    <!-- description starts -->
+                                    <div class="col-8">
+                                        <label for="vehiInputNote" class="fw-bold">Description</label>
+                                        <textarea id="vehiInputNote" class="form-control" rows="5"
+                                            onkeyup="inputFieldValidator(this,'','rentalVehicleObj','discription')"></textarea>
+                                    </div>
+
+                                    <!--select status starts -->
+                                    <div class="col-4">
+                                        <label for="selectVehiStatus" class="fw-bold form-label mb-0"> Vehicle Status
+                                            :</label>
+                                        <select id="selectVehiStatus" class="form-control form-select"
+                                            onchange="selectDynamicVal(this, '' , 'rentalVehicleObj','vehistatus_id')">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!--2 form buttons starts -->
+                                <div class="row mt-3">
+
+                                    <div class="col-12 text-end">
+                                        <button type="reset" class="btn btn-all btn-clear"
+                                            onclick="refreshNewRentalvehiForm();">Clear</button>
+
+                                        <button type="submit" id="newRentalVehicleAddBtn" class="btn btn-all btn-add"
+                                            onclick="submitNewRentalVehi()" style="pointer-events: all;">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- add new rented vehi form ends -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal for add new rental vehicles ends -->
+
+        <!-- modal for add new external drivers/guides -->
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="newExternalDriverOrGuideModal" tabindex="-1">
+
+            <div class="modal-dialog modal-lg" style="min-width: 1000px;">
+
+                <div class="modal-content border-warning">
+
+                    <!-- modal header -->
+                    <div class="modal-header bg-dark">
+                        <h5 class="modal-title fw-bold text-warning" id="staticBackdropLabel">New External Employees
+                            Management Form</h5>
+
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container">
+                            <form id="newExtEmpMgtForm" onsubmit="return false">
+
+                                <div class="row g-3">
+                                    <!--  role select starts -->
+                                    <div class="col-md-3">
+                                        <label for="selectExternalEmpRole" class="form-label fw-bold">Role <span
+                                                class="text-danger"> * </span> :</label>
+                                        <select required id="selectExternalEmpRole" class="form-select"
+                                            onchange="selectStaticVal(this, '' , 'newExtPartyObj' , 'roletype')">
+                                            <option value="" selected disabled>Select Role</option>
+                                            <option value="Driver">Driver</option>
+                                            <option value="Tour Guide">Tour Guide</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- full name -->
+                                    <div class="col-md-5">
+                                        <label for="inputFullName" class="form-label fw-bold">Full Name <span
+                                                class="text-danger"> * </span> :</label>
+                                        <input id="inputFullName" type="text" class="form-control"
+                                            placeholder="Enter The Full Name"
+                                            onkeyup="inputFieldValidator(this,'', 'newExtPartyObj' , 'name')" required>
+                                    </div>
+
+                                    <!-- nic -->
+                                    <div class="col-md-4">
+                                        <label for="inputNIC" class="form-label fw-bold">NIC <span class="text-danger">
+                                                * </span> :</label>
+                                        <input id="inputNIC" type="text" class="form-control" required
+                                            onkeyup="inputFieldValidator(this,'^[0-9Vv]{10}$', 'newExtPartyObj' , 'nic')"
+                                            placeholder="Enter The NIC Number">
+                                    </div>
+
+                                </div>
+
+                                <div class="row g-3 mt-2">
+                                    <!-- mobile no -->
+                                    <div class="col-md-4">
+                                        <label for="inputContactOne" class="form-label fw-bold">Mobile Number <span
+                                                class="text-danger"> * </span> :</label>
+                                        <input id="inputContactOne" type="text" required
+                                            placeholder="Enter The Mobile Number" class="form-control form-input-lg"
+                                            onkeyup="inputFieldValidator(this,'^[0][7][1245678][0-9]{7}$' , 'newExtPartyObj' , 'contactone')">
+                                    </div>
+
+                                    <!-- land no -->
+                                    <div class="col-md-4">
+                                        <label for="inputContactTwo" class="form-label fw-bold">Land Number <span
+                                                class="text-info">*</span> :</label>
+                                        <input id="inputContactTwo" type="text" class="form-control form-input-sm"
+                                            placeholder="Enter The Land Number"
+                                            onkeyup="inputFieldValidator(this, '^[0][1-9][0-9]{8}$','newExtPartyObj','contacttwo')">
+                                    </div>
+
+                                    <!-- charge per day  -->
+                                    <div class="col-md-4">
+                                        <label for="chargeRateInput" class="form-label mb-0 text-info">Charge Per
+                                            Day:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text p-1 ">LKR</span>
+                                            <input required type="text" id="chargeRateInput"
+                                                class="form-control form-input"
+                                                onchange="inputFieldValidator(this,'','newExtPartyObj','chargeperday');">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <!-- agency info -->
+                                <div class="row g-3 mt-2">
+                                    <div class="col-8">
+                                        <!-- agency name -->
+                                        <label for="inputAgencyName" class="form-label fw-bold">Agency Name:
+                                            <span class="text-danger">*</span> :</label>
+                                        <input id="inputAgencyName" type="text" class="form-control form-input-sm"
+                                            placeholder=""
+                                            onkeyup="inputFieldValidator(this, '','newExtPartyObj','agencyname')">
+                                    </div>
+
+
+                                    <!-- agency no -->
+                                    <div class="col-md-4">
+                                        <label for="inputAgencyContact" class="form-label fw-bold">Agency Contact
+                                            Number:
+                                            <span class="text-danger">*</span> :</label>
+                                        <input id="inputAgencyContact" type="text" class="form-control form-input-sm"
+                                            placeholder="Enter The Land Number"
+                                            onkeyup="inputFieldValidator(this, '^[0][1-9][0-9]{8}$','newExtPartyObj','extagencycontact')">
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mt-2">
+                                    <!-- note -->
+                                    <div class="col-md-8">
+                                        <label for="extEmpNote" class="form-label mb-1">Note:</label>
+                                        <textarea class="form-control" id="extEmpNote" style="height: 100px;"
+                                            onkeyup="inputFieldValidator(this,'','newExtPartyObj','note')"></textarea>
+                                    </div>
+
+                                    <!-- status -->
+                                    <div class="col-md-4">
+                                        <label for="extEmpStatusSelect" class="form-label mb-1">Status:</label>
+                                        <select id="extEmpStatusSelect" class="form-select mb-2"
+                                            onchange="selectDynamicVal(this, '' , 'newExtPartyObj' , 'extstatus_id')"></select>
+                                    </div>
+                                </div>
+
+                                <!--2 form buttons starts -->
+                                <div class="row mt-3">
+
+                                    <div class="col-12 text-end">
+                                        <button type="reset" class="btn btn-all btn-clear"
+                                            onclick="refreshVehiForm();">Clear</button>
+
+                                        <button type="submit" id="newextEmployeeAddBtn" class="btn btn-all btn-add"
+                                            onclick="submitNewExtEmployee()" style="pointer-events: all;">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- add new ext employee form ends -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal for add new external drivers/guides ends -->
+
+    </main>
+</body>

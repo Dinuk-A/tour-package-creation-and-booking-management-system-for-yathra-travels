@@ -1,0 +1,54 @@
+<header th:fragment="headerFragment" id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <button class="bi bi-list toggle-sidebar-btn border-none">
+            <img src="resources/images/toggle.svg" width="25px" alt="" onclick="openNav();">
+        </button>
+        <a href="http://localhost:8080/dashboard" class="logo d-flex align-items-center my-auto">
+            <!-- <img src="ylogo.png" alt="image failed" style="background-size: contain;"> -->
+            <span class="d-none d-lg-block ms-1">Yathra Travels</span>
+        </a>
+    </div>
+
+
+
+
+    <nav class="header-nav ms-auto d-flex align-items-center">
+
+        <ul class="d-flex align-items-center">
+
+
+            <li class="nav-item  pe-3">
+                <!-- dropdown -->
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#">
+                    <!-- data-bs-toggle="dropdown" -->
+
+                    <img id="userPhotoIDHere" src="resources/images/employee.png" alt="Profile image here"
+                        class="rounded-circle" data-bs-toggle="modal" data-bs-target="#userInfoEditModal"
+                        onclick="refreshProfileEditForm();">
+                    <span class=" d-md-block ps-2" th:text="${loggedusername}"></span>
+                    <span class=" d-md-block ps-2 d-none" id="loggedUserDesignationId"
+                        th:text="${loggeduserdesignation}" style="display: none !important;"></span>
+
+                </a>
+            </li>
+
+        </ul>
+
+        <!-- meka one tour pkg ekedi -->
+        <ul class="d-flex align-items-center ms-5 " style="visibility: hidden;">
+            <li class="nav-item  mx-auto" th:text="${loggeduserrole}">role</li>
+        </ul>
+
+        <ul class="d-flex align-items-center mx-5">
+            <li class="nav-item border border-warning p-1">
+                <a onclick="let userConfirm = confirm('Are you sure to sign out...?'); if (userConfirm) window.location.replace('/logout'); "
+                    class="fw-bold text-warning" style="cursor: pointer; text-decoration: none; ">
+                    <span>Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+</header>

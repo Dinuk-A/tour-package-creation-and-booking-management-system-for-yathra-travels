@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+
+    <script src="controllerJS/reportinqsuccess.js"></script>
+
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <div class="container-fluid main">
+
+
+            <div class="container mt-5">
+                <!-- heading -->
+                <h2 class="text-center">Inquiry Statistics</h2>
+                <div class="row justify-content-center mt-4">
+
+                    <!-- 2 date pickers -->
+                    <div class="col-md-3">
+                        <label for="startDatePickerID" class="form-label">Start Date</label>
+                        <input type="date" id="startDatePickerID" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="endDatePickerID" class="form-label">End Date</label>
+                        <input type="date" id="endDatePickerID" class="form-control">
+                    </div>
+                    <div class="col-md-2 align-self-end">
+                        <button id="filterBtn" class="btn btn-primary mt-2" onclick="fillTable();">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Initially hidden table -->
+                <table id="inquiryTable" class="table table-bordered table-striped mt-4 d-none">
+
+                    <!-- 4 headers -->
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Date Range</th>
+                            <th scope="col">Total Inquiries</th>
+                            <th scope="col">Booked Inquiries</th>
+                            <th scope="col">Success Rate</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- auto fill cols -->
+                        <tr>
+                            <td id="dateRange"></td>
+                            <td id="totalInquiries"></td>
+                            <td id="successfulInquiries"></td>
+                            <td id="successRateId"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>>
+
+</body>
+
+</html>

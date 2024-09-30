@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+
+    <!-- link main css -->
+    <link rel="stylesheet" href="resources/css/client.css">
+
+    <!-- link vehicle js -->
+    <script src="controllerJS/client.js"></script>
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <!-- modal btn starts -->
+        <!-- <div class="row mt-2"> -->
+
+        <!-- <div class="d-flex justify-content-center">
+            <button type="button" class="btn modal-btn" data-bs-toggle="modal" data-bs-target="#modalClient"
+                area-controls="modalClient">+ Client</button>
+        </div>
+    </div> -->
+
+        <!-- main buttons starts -->
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div id="divModify" class=" d-none float-end">
+                    <button type="button" id="btnEdit" style="pointer-events: all;"
+                        onclick="editClient(window['editOb'], window['editRow'])"
+                        class="btn btn-warning btn-edit">Edit</button>
+
+                    <button type="button" id="btnDelete" style="pointer-events: all;"
+                        onclick="deleteClient(window['editOb'], window['editRow'])"
+                        class="btn btn-danger btn-delete">Delete</button>
+
+                    <button type="button" id="btnPrint" style="pointer-events: all;"
+                        onclick="printClient(window['editOb'], window['editRow'])"
+                        class="btn btn-info btn-print">Print</button>
+
+
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <!-- modal starts -->
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="modalClient" tabindex="-1">
+
+            <div class="modal-dialog modal-lg" style="min-width: 1000px;">
+
+                <div class="modal-content">
+
+                    <!-- modal header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Client Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container">
+
+                            <form id="formClient" onsubmit="return false">
+
+                                <!-- name,nationality,nic/passport -->
+                                <div class="row mt-2">
+
+                                    <!-- name -->
+                                    <div class="col-4">
+                                        <label for="clientName" class="form-label fw-bold mb-0">Name</label>
+
+                                        <input id="clientName" class="form-control form-input"
+                                            onkeyup="inputFieldValidator(this, '' ,'client' ,'clientname' )">
+                                    </div>
+
+                                    <!-- nationality -->
+                                    <div class="col-4">
+                                        <label for="clientNationality" class="form-label fw-bold mb-0">Nationality
+                                            :</label>
+
+                                        <select id="clientNationality" class="form-control form-select"
+                                            onchange="selectDynamicVal(this,'','client','nationality'); changesBasedOnNationality(); passCountryCode();"></select>
+                                    </div>
+
+                                    <!-- pasport/nic -->
+                                    <div class="col-4">
+                                        <label id="labelForPPTorNIC" for="clientPassportOrNIC"
+                                            class="form-label fw-bold mb-0">Passport/NIC</label>
+
+                                        <input id="clientPassportOrNIC" class="form-control form-input"
+                                            onkeyup="validatorPptNoNIC(this,'client','passportnumornic')">
+                                    </div>
+
+                                </div>
+
+                                <!-- email,contact1,contact2 -->
+                                <div class="row mt-2">
+                                    <!-- email -->
+                                    <div class="col-4">
+                                        <label for="clientEmail" class="form-label fw-bold mb-0">email</label>
+
+                                        <input id="clientEmail" class="form-control form-input"
+                                            onkeyup="inputFieldValidator(this, '' ,'client' ,'email' )">
+                                    </div>
+
+                                    <!-- contact1 -->
+                                    <div class="col-4">
+                                        <label for="clientContactOne" class="form-label fw-bold mb-0">contact 1
+                                            :</label>
+
+                                        <input id="clientContactOne" class="form-control form-input"
+                                            onkeyup="inputFieldValidator(this,'','client','contactnum')"></input>
+                                    </div>
+
+                                    <!-- contact2 -->
+                                    <div class="col-4">
+                                        <label for="clientContactTwo" class="form-label fw-bold mb-0">contact 2</label>
+
+                                        <input id="clientContactTwo" class="form-control form-input" onkeyup="inputFieldValidator(this, '' ,'client' ,'contactnumtwo' ); if (this.value == clientContactOne.value) {
+                                            alert('Please Enter A Different Contact from Contact #1 Input')
+                                        }">
+                                    </div>
+                                </div>
+
+                                <!-- address >>> only if local , nationality sl nam d-none ayn wenna danna -->
+                                <div class="row mt-2 d-none" id="addrRow">
+                                    <div class="col-6 pe-0">
+                                        <label for="clienAddressLocal" class="form-label fw-bold mb-0">Address :
+                                        </label>
+                                        <textarea id="clienAddressLocal" class="form-input form-control"
+                                            style="height: 115px;"
+                                            onkeyup="inputFieldValidator(this,'','client','address')"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- note,status -->
+                                <div class="row mt-2">
+                                    <div class="col-6 pe-0">
+                                        <label for="clientNote" class="form-label fw-bold mb-0">note : </label>
+                                        <textarea id="clientNote" class="form-input form-control" style="height: 115px;"
+                                            onkeyup="inputFieldValidator(this,'','client','note')"></textarea>
+                                    </div>
+                                    <!-- status -->
+                                    <div class="col-6">
+                                        <label for="clientStatus" class="form-label fw-bold mb-0">status :</label>
+
+                                        <select id="clientStatus" class="form-control form-select"
+                                            onchange="selectDynamicVal(this,'','client','clientstatus')"></select>
+                                    </div>
+                                </div>
+
+                                <!--3 form buttons starts -->
+                                <div class="row mt-3">
+
+                                    <div class="col-3">
+                                        <button type="reset" class="btn btn-all btn-clear"
+                                            onclick="refreshClientForm()">
+                                            Clear</button>
+                                    </div>
+
+                                    <div class="col-9 text-end">
+                                        <button type="button" id="clientUpdateBtn" class="btn btn-all btn-update "
+                                            onclick="updateClient()" style="pointer-events: all;">Update</button>
+
+                                        <button type="submit" id="clientAddBtn" class="btn btn-all btn-add "
+                                            onclick="addClient()" style="pointer-events: all;">Add</button>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- table area starts -->
+        <div class="row mt-2">
+            <div class="col-1"></div>
+
+            <!-- table starts -->
+            <div class="col-10">
+                <div class="card card-body bg-info bg-opacity-25">
+                    <table id="clientMaintable" class="table table-bordered table-striped border-primary mt-2 mb-2">
+
+                        <thead class="table-primary">
+
+                            <th>No.</th>
+                            <th>Client Name</th>
+                            <th>Nationality</th>
+                            <th>NIC/PPT</th>
+                            <th>Email</th>
+                            <th>Contacts</th>
+                            <th>Status</th>
+                            <th>Modify</th>
+
+                        </thead>
+                        <tbody class="">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+   
+    <div th:fragment="userInfoEditModalFragment" class="modal fade" id="userInfoEditModal" tabindex="-1"
+    aria-labelledby="userEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="userEditModalLabel">Edit User Info</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="return false" id="formUserDetailsEdit">
+    
+                    <!-- user photo -->
+                    <div class="row mt-2 borders">
+                        <div class="col-3 text-end fw-bold"></div>
+    
+                        <div class="col-3 text-center">
+                            <img src="resources/images/employee.png" style="width: 75px; height: 75px; border-radius: 50px;"
+                                id="editPortalImage">
+                            <input type="file" class="d-none" id="fileUserPhoto"  onchange="imgValidator(this,'loggeduser','user_photo','',editPortalImage)">
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-primary fw-bold w-100"
+                                onclick="fileUserPhoto.click();">Change
+                                Image</button><br>
+                            <!-- <button type="button"
+                    class=" mt-1 btn btn-primary fw-bold w-100">Clear Image</button> -->
+                        </div>
+                        <div class="col-3 text-end fw-bold"></div>
+                    </div>
+                    <!-- user photo -->
+    
+                    <!-- username start -->
+                    <div class="row mt-1 border ">
+                        <div class="col-10 p-1 mx-auto">
+                            <label for="editPortalUN" class="form-label fw-bold mb-0">User Name : </label>
+                            <input type="text" id="editPortalUN" class="form-control shadow" required
+                                placeholder="Enter The Username" onkeyup="inputFieldValidator(this,'','loggedUser','username')">
+                        </div>
+                    </div>
+                    <!-- username end -->
+    
+                    <!-- Email start -->
+                    <div class="row mt-1  border ">
+                        <div class="col-10 p-1 mx-auto">
+                            <label for="editPortalEmail" class="form-label fw-bold mb-0 mt-1">Email : </label>
+                            <input type="text" id="editPortalEmail" class="form-control shadow" required
+                                placeholder="Enter The Email Address" onkeyup="inputFieldValidator(this,'','loggedUser','email')">
+                        </div>
+                    </div>
+                    <!-- Email end -->
+
+                    <!--Current Password start -->
+                    <div class="row mt-1  border ">
+                        <div class="col-10 p-1 mx-auto">
+                            <label for="editPortalCurrentPW" class="form-label fw-bold mb-0 mt-1">Curent Password : </label>
+                            <input type="password" id="editPortalCurrentPW" class="form-control shadow " required
+                                placeholder="Enter The Current Passworde"  onkeyup="inputFieldValidator(this,'','loggedUser','currentpw')">
+                        </div>
+                    </div>
+                    <!-- Password end -->
+    
+                    <!--New Password start -->
+                    <div class="row mt-1  border ">
+                        <div class="col-10 p-1 mx-auto">
+                            <label for="editPortalNewPW" class="form-label fw-bold mb-0 mt-1">New Password : </label>
+                            <input type="password" id="editPortalNewPW" class="form-control shadow " required
+                                placeholder="Enter The New Passworde"  onkeyup="inputFieldValidator(this,'','loggedUser','newpw')">
+                        </div>
+                    </div>
+                    <!-- Password end -->
+    
+                    <!-- Retype pw start -->
+                    <div class="row mt-1  border ">
+                        <div class="col-10 p-1 mx-auto">
+                            <label for="editPortalRetypePW" class="form-label fw-bold mb-0 mt-1">Re Enter The Password
+                                : </label>
+                            <input type="password" id="editPortalRetypePW" class="form-control shadow" required
+                                placeholder="Enter The Same Password " onkeyup="retypePasswordValiForEditPortal();">
+                        </div>
+                    </div>
+                    <!-- Retype pw end -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitProfileChanges();">Save changes</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    
+    

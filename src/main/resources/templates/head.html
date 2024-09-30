@@ -1,0 +1,52 @@
+<head th:fragment="headFragment">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${title}"></title>
+
+    <!-- link bootstrp css -->
+    <link rel="stylesheet" href="resources/bootstrap-5.2.3/css/bootstrap.min.css">
+
+    <!-- link bootsrtap js file -->
+    <script src="resources/bootstrap-5.2.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- common css -->
+    <link rel="stylesheet" href="resources/css/common.css">
+
+    <!-- button css -->
+    <link rel="stylesheet" href="resources/css/buttons.css">
+
+    <!-- link table common fuction js file -->
+    <script src="resources/scripts/tableCommonFunction.js"></script>
+
+    <!-- link valiidation file  -->
+    <script src="resources/scripts/validationFn.js"></script>
+
+    <!-- link common fn -->
+    <script src="resources/scripts/commonFn.js"></script>
+
+    <!-- link jquery  -->
+    <script src="resources/scripts/jQuery.js"></script>
+
+    <!-- link DATATABLE JQUERY CSS  -->
+    <link rel="stylesheet" href="resources/datatables-1.13.6/css/jquery.dataTables.css">
+
+    <!-- link DATATABLE JQUERY JS -->
+    <script src="resources/datatables-1.13.6/js/jquery.dataTables.js"></script>
+
+    <script src="resources/scripts/useredit.js"></script>
+
+    <script th:inline="javascript">
+        window.addEventListener('load', () => {
+
+            let userPhotoVar = /*[[${loggedUserPhoto}]]*/ 'loggeduserphoto';
+            if (userPhotoVar != null) {
+                //decrypt the byte array
+                userPhotoIDHere.src = atob(userPhotoVar);
+            }
+
+        })
+    </script>
+
+</head>

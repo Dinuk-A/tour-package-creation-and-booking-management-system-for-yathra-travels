@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+    <!-- link stay css -->
+    <!-- <link rel="stylesheet" href="resources/css/stay.css"> -->
+
+    <!-- link main JS -->
+    <script src="controllerJS/stay.js"></script>
+
+    <!-- for TH padding 5
+    text align center -->
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+    
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+    <div class="container-fluid main">
+
+        <!-- title starts -->
+        <div class="row p-2">
+            <div class="col-12 text-center bg-primary">
+                <h2 class="h2">
+                    Accomandations Management TESTTTTT
+                </h2>
+            </div>
+        </div>
+
+        <!-- modal buttons starts -->
+        <div class="row mt-2">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-primary modal-btn " data-bs-toggle="modal"
+                    data-bs-target="#modalStay">
+                    Accomandations Management Form </button>
+            </div>
+        </div>
+
+        <!-- 3 buttons starts -->
+        <div class="row ">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div id="divModify" class=" d-none float-end">
+                    <button type="button" id="btnEdit" onclick="stayFormReFill(window['editOb'], window['editRow'])"
+                        class="btn btn-edit" style="pointer-events: all;">Edit</button>
+
+                    <button type="button" id="btnDelete" onclick="deleteStay(window['editOb'], window['editRow'])"
+                        class="btn btn-delete" style="pointer-events: all;">Delete</button>
+
+                    <button type="button" id="btnPrint" onclick="printStay(window['editOb'], window['editRow'])"
+                        class="btn btn-print" style="pointer-events: all;">Print</button>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <!--modal starts -->
+        <div id="modalStay" aria-hidden="true" class="modal fade" aria-labelledby="staticBackdropLabel"
+            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+
+            <div class="modal-dialog modal-lg ">
+
+                <div class="modal-content">
+
+                    <!-- modal header starts -->
+                    <div class="modal-header" id="staticBackdropLabel">
+                        <h4>Accomandations Information</h4>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <!-- modal body starts -->
+                    <div class="modal-body">
+
+                        <div class="container">
+
+                            <!-- form starts -->
+                            <form id="formStay" onsubmit="return false">
+
+                                <!-- NAME AND TYPE ROW STARTS -->
+                                <div class="row mt-2 mb-1">
+
+                                    <!-- NAME -->
+                                    <div class="col-7 pe-0">
+                                        <label for="stayName" class="form-label">Name</label>
+
+                                        <input id="stayName" class="form-control form-input"
+                                            onkeyup="inputFieldValidator(this, '' ,'stay' ,'name' )">
+                                    </div>
+
+                                    <!-- TYPE -->
+                                    <div class="col-5 ps-1">
+                                        <label for="stayTypeSelect" class="form-label">Type :</label>
+
+                                        <select id="stayTypeSelect" class="form-control form-select"
+                                            onchange="selectDynamicVal(this,'','stay','staytype_id')"></select>
+                                    </div>
+                                </div>
+
+                                <!-- ADDRESS , PROVINCE, DISTRICTS -->
+                                <div class="row mt-2 mb-1">
+
+                                    <!-- ADDRESS -->
+                                    <div class="col-6 pe-0">
+                                        <label for="stayAddress">Address : </label>
+                                        <textarea id="stayAddress" class="form-input form-control"
+                                            style="height: 115px;"
+                                            onkeyup="inputFieldValidator(this,'','stay','address')"></textarea>
+                                    </div>
+
+                                    <div class="col-6 ">
+                                        <!-- PROVINCE -->
+                                        <label for="stayProvinceSelect" class="form-label mb-1">Province :</label>
+                                        <select id="stayProvinceSelect" class="form-control form-select mb-2"
+                                            onchange="getDistByProvince()"></select>
+
+                                        <!-- DISTRICT -->
+                                        <label for="stayDistrictSelect" class="form-label mb-1">District :</label>
+                                        <select id="stayDistrictSelect" class="form-select"
+                                            onchange="selectDynamicVal(this,'','stay','district_id')"></select>
+                                    </div>
+                                </div>
+
+                                <!-- CONTACT #1,#2, EMAIL -->
+                                <div class="row mt-2 mb-1">
+
+                                    <!-- CONTACT 1 -->
+                                    <div class="col-3 pe-0">
+                                        <label for="stayContactOne" class="form-label mb-1">Contact #1 :</label>
+
+                                        <input type="text" class="form-control form-input" id="stayContactOne"
+                                            onkeyup="inputFieldValidator(this,'','stay','contactnum1')">
+                                    </div>
+
+                                    <!-- CONTACT 2 -->
+                                    <div class="col-3 ps-1 ">
+                                        <label for="stayContactTwo" class="form-label mb-1">Contact #2 :</label>
+
+                                        <input type="text" class="form-control form-input" id="stayContactTwo"
+                                            style="width:190px;"
+                                            onkeyup="inputFieldValidator(this,'','stay','contactnum2')">
+                                    </div>
+
+                                    <!-- EMAIL -->
+                                    <div class="col-6 ">
+                                        <label for="stayEmail" class="form-label mb-1">Email
+                                            :</label>
+
+                                        <input type="text" class="form-control form-input" id="stayEmail"
+                                            onkeyup="inputFieldValidator(this,'','stay','email')">
+                                    </div>
+
+                                </div>
+
+                                <!-- NOTE, MAX GUEST COUNT, STATUS -->
+                                <div class="row mt-2 mb-1">
+
+                                    <div class="col-6 ">
+                                        <!-- MAX GUEST COUNT -->
+                                        <label for="stayMaxGuestCount" class="form-label mb-1">Max Guests Count
+                                            :</label>
+
+                                        <div class="input-group">
+                                            <input type="number" id="stayMaxGuestCount" class="form-control mb-2"
+                                                onkeyup="inputFieldValidator(this,'','stay','maxguestscount')">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text rounded-0"> Guests</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- STATUS -->
+                                        <label for="stayStatusSelect" class="form-label mb-1">Status :</label>
+
+                                        <select id="stayStatusSelect" class="form-control form-select"
+                                            onchange="selectDynamicVal(this,'','stay','staystatus_id')"></select>
+                                    </div>
+
+                                    <!-- NOTE -->
+                                    <div class="col-6 pe-0">
+                                        <label for="stayNote">Note : </label>
+                                        <textarea id="stayNote" class="form-input form-control" style="height: 115px;"
+                                            onkeyup="inputFieldValidator(this,'','stay','note')"></textarea>
+                                    </div>
+
+                                </div>
+
+                                <!--3 form buttons starts -->
+                                <div class="row mt-3">
+
+                                    <div class="col-3">
+                                        <button type="reset" class="btn btn-all btn-clear">Clear</button>
+                                    </div>
+
+                                    <div class="col-9 text-end">
+                                        <button type="button" id="stayUpdateBtn" class="btn btn-all btn-update "
+                                            onclick="updateStay()" style="pointer-events: all;">Update</button>
+
+                                        <button type="submit" id="stayAddBtn" class="btn btn-all btn-add "
+                                            onclick="addStay()" style="pointer-events: all;">Add</button>
+
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- table area starts -->
+    <div class="row mt-2">
+        <div class="col-1"></div>
+
+        <!-- table starts -->
+        <div class="col-10">
+            <div class="card card-body bg-info bg-opacity-25">
+                <table id="stayMainTable" class="table table-bordered table-striped border-primary mt-2 mb-2">
+
+                    <thead class="bg-primary table-light">
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Address</th>
+                        <th>Contacts</th>
+                        <th>Max Guests</th>
+                        <th>Status</th>
+                        <th>Modify</th>
+
+                    </thead>
+                    <tbody class="">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yathra Travels</title>
+
+    <!-- link bootstrp css -->
+    <link rel="stylesheet" href="resources/bootstrap-5.2.3/css/bootstrap.min.css">
+
+    <!-- link bootsrtap js file -->
+    <script src="resources/bootstrap-5.2.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- button css -->
+    <link rel="stylesheet" href="resources/css/buttons.css">
+
+    <!-- main CSS -->
+    <link rel="stylesheet" href="resources/css/yathra.css">
+
+    <!-- link valiidation file  -->
+    <script src="resources/scripts/validationFn.js"></script>
+
+    <!-- link common fn -->
+    <script src="resources/scripts/commonFn.js"></script>
+
+    <!-- link jquery  -->
+    <script src="resources/scripts/jQuery.js"></script>
+
+    <!-- link main js -->
+    <script src="controllerJS/yathra.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        h1,
+        h2,
+        h4,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        section {
+            padding: 40px 0;
+        }
+
+        .ctn {
+            display: inline-block;
+            background-color: #fc036b;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .ctn:hover {
+            background-color: #e60050;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .title .line {
+            width: 80px;
+            height: 4px;
+            background-color: #fc036b;
+            margin: 0 auto;
+        }
+
+        .events .row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .events .col {
+            flex: 0 1 45%;
+            margin-bottom: 20px;
+        }
+
+        .events img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .events h4 {
+            margin-top: 10px;
+            font-size: 1.5rem;
+        }
+
+        .events p {
+            margin: 10px 0;
+        }
+
+        .popular-destinations .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .popular-destinations .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .popular-destinations .row .col {
+            flex: 0 1 23%;
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .explore {
+            background-color: #f7f7f7;
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .explore .explore-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .explore .explore-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .explore .explore-content p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        #generalInquiries {
+            padding: 40px 0;
+            background-color: #becf22;
+        }
+
+        #generalInquiries .container-fluid {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #generalInquiries .form-label {
+            font-weight: bold;
+        }
+
+        #generalInquiries .form-input {
+            border-radius: 5px;
+            border: 1px solid #bbbbbb;
+        }
+
+        #generalInquiries .form-floating textarea {
+            resize: none;
+        }
+
+        #footer {
+            padding: 40px 0;
+            color: white;
+            text-align: center;
+            background-color: brown;
+        }
+
+        #footer .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #footer h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        #footer h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-section {
+            background: linear-gradient(to bottom right, #6a11cb, #2575fc);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero-section .btn {
+            background-color: #ff4081;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            border-radius: 30px;
+        }
+
+        .inquiries-section {
+            background-color: #f0f4f8;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .inquiries-section .card {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .footer-section {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .footer-section .btn {
+            background-color: #ff4081;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+        }
+
+        /* js cards */
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .accordion-button {
+            border: none;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: #007bff;
+        }
+
+        .accordion-body {
+            background-color: #f1f1f1;
+        }
+
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            /* Makes the paragraph flexible for card height */
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .row-cols-1.row-cols-md-2.row-cols-lg-4 {
+            justify-content: center;
+        }
+
+
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        #pkgDescription {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .accordion {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .modal-body .row+.row {
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h1 class="logo">
+            <!-- <img src="resources/images/ylogo.png" alt="Yathra Travels"> -->
+            Yathra Travels
+        </h1>
+        <ul class="nav-links">
+            <li class="active"><a href="#home">Home</a></li>
+            <li><a href="#destinations">Tour Packages</a></li>
+            <li><a href="#generalInquiries">inquiries</a></li>
+            <li><a href="#about">About</a></li>
+            <li class="ctn"><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- HEADER IMG/CONTENT -->
+    <div class="header" id="home">
+        <div class="header-content">
+            <h2>Explore The Beauty of Sri Lanka</h2>
+            <div class="line"></div>
+            <h1>Discover Amazing Tours</h1>
+
+        </div>
+    </div>
+
+    <!-- EVENTS -->
+    <section class="events py-5"
+        style="background-image: url('resources/images/background-cover.jpg'); background-size: cover; background-position: center; color: #fff;">
+        <div class="container">
+            <div class="title text-center mb-4">
+                <h1 class="display-4 font-weight-bold">Upcoming Events</h1>
+                <div class="line mx-auto" style="width: 60px; height: 3px; background-color: #fff;"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-dark text-white border-0">
+                        <img src="resources/images/sunset-beach.jpg" class="card-img" alt="Sunset Beach">
+                        <div class="card-img-overlay d-flex flex-column justify-content-end p-4">
+                            <h4 class="card-title">Sunset Beach Party</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente,
+                                dicta tenetur? Non aut harum, quibusdam possimus, accusantium ducimus minima ullam ipsa
+                                odit atque temporibus maxime. Voluptate rem quaerat magni doloremque?</p>
+                            <a href="#" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-dark text-white border-0">
+                        <img src="resources/images/ella-bridge.jpg" class="card-img" alt="Ella Bridge">
+                        <div class="card-img-overlay d-flex flex-column justify-content-end p-4">
+                            <h4 class="card-title">Ella Bridge Trek</h4>
+                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio at
+                                labore quo quae qui beatae! Animi asperiores quasi odit! Nam alias quos illo ut dicta
+                                quam maxime totam odio vel.</p>
+                            <a href="#" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--popular Packages cards -->
+    <section id="destinations" class="popular-destinations">
+        <div class="title">
+            <h1>Popular Packages</h1>
+            <div class="line"></div>
+        </div>
+
+        <!-- cards list -->
+        <div class="container mt-4">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="packageCardsList">
+
+                <!-- cards will be auto generated by js -->
+
+            </div>
+        </div>
+
+        <!-- Reusable modal for displaying package details -->
+        <div class="modal fade" id="reusableModalForCards" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal header -->
+                    <div class="modal-header">
+                        <h2 id="pkgname" class="modal-title"></h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="window.location.reload()"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <!-- Package description -->
+                        <div class="row mb-3">
+                            <div class="col-md-12 mx-auto">
+                                <p id="pkgDescription" class="text-muted">Test description</p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <!-- Images container -->
+                            <div class="col-12 d-flex justify-content-between">
+                                <!-- Image 1 -->
+                                <div class="img-container" style="width: 32%; height: auto; margin-right: 1%;">
+                                    <img id="image2" src="" alt="Image 1" class="img-fluid"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
+                                </div>
+                                <!-- Image 2 -->
+                                <div class="img-container" style="width: 32%; height: auto; margin-right: 1%;">
+                                    <img id="image3" src="" alt="Image 2" class="img-fluid"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
+                                </div>
+                                <!-- Image 3 -->
+                                <div class="img-container" style="width: 32%; height: auto;">
+                                    <img id="image4" src="" alt="Image 3" class="img-fluid"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Include/Exclude sections -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <h5 class="text-success">Included in Your Package:</h5>
+                                <ul id="pkgIncludeList">
+                                    <li><strong>Transportation:</strong> Comfortable and convenient transport to all
+                                        major attractions and between destinations.</li>
+                                    <li><strong>Accommodation:</strong> Stay in top-rated hotels or resorts, providing
+                                        comfort and quality service.</li>
+                                    <li><strong>Breakfast:</strong> Enjoy a delicious breakfast each morning to start
+                                        your day right.</li>
+                                    <li><strong>Guided Tours:</strong> Explore local landmarks and attractions with
+                                        knowledgeable guides who provide insights and history.</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="text-danger">Not Included:</h5>
+                                <ul id="pkgExcludeList">
+                                    <li><strong>Lunch & Dinner:</strong> Meals outside of breakfast are not covered;
+                                        explore local dining options at your leisure.</li>
+                                    <li><strong>Personal Expenses:</strong> Costs for personal items, souvenirs, or
+                                        optional activities are not included in the package.</li>
+                                    <li><strong>Travel Insurance:</strong> Insurance for travel-related issues or
+                                        emergencies is not included; we recommend purchasing your own coverage.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <!-- Day plans -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="accorsForStartDayPlans" class="accordion mb-3"></div>
+                                <div id="ForDPlansAccordions" class="accordion mb-3"></div>
+                                <div id="accorsForEndDayPlans" class="accordion mb-3"></div>
+                            </div>
+                        </div>
+
+                        <!-- Action button -->
+                        <div class="text-end">
+                            <button type="button" id="btnPrint" class="btn btn-primary"
+                                onclick="openModalForPkgInqs()">Request Package Information</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- modal for pkg related inqs -->
+        <div class="modal fade" id="modalForPkgRelatedInqs" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg" style="width: 850px;">
+                <div class="modal-content">
+                    <!-- modal header -->
+                    <div class="modal-header bg-dark text-warning">
+                        <h2>Submit Your Inquiry Here</h2>
+
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            onclick="inquiry.inqtype = null; window.location.reload();"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <!-- display selected package -->
+                        <div class="row">
+                            <div class="col-4">
+                                <p>Interested Package :</p>
+                            </div>
+                            <div class="col-8">
+                                <p  style="font-size: 1.5em;" id="selectedPkgName"> </p>
+                            </div>
+                        </div>
+
+                        <!--PKG RLTD form starts -->
+                        <form onsubmit="return false" id="formPkgRelateInqForm">
+
+                            <div class="row">
+                                <input type="hidden" id="inqTypeDummy" name="inqType" value="Package-Related">
+
+                                <div class="col-3">
+                                    <label for="inqClientTitlePkgrelated" class="form-label fw-bold mb-0">Title</label>
+                                    <select class="form-select" id="inqClientTitlePkgrelated"
+                                        onchange="selectStaticVal(this, '', 'inquiry', 'clienttitle')">
+                                        <option selected disabled>Select Title</option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Ms">Ms</option>
+                                        <option value="Mrs">Mrs</option>
+                                        <option value="Dr">Dr</option>
+                                        <option value="Prof">Prof</option>
+                                    </select>
+                                </div>
+
+                                <!-- client name -->
+                                <div class="col-9">
+                                    <label class="fw-bold form-label mb-0" for="inqClientNamePkgRelForm">Name
+                                        :</label>
+                                    <input type="text" class="form-control form-input rounded-end"
+                                        id="inqClientNamePkgRelForm" placeholder="John Doe"
+                                        onkeyup="inputFieldValidator(this, '^([A-Z][a-z]{2,30}[\\s])+([A-Z][a-z]{2,30})$' ,'inquiry' ,'clientname' )">
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-2">
+                                <!-- nationality -->
+                                <div class="col-6">
+                                    <label class="fw-bold form-label mb-0" for="pkgRelInqNationalitySelect">Nationality
+                                        :</label>
+                                    <!-- <input required type="text" id="pkgRelInqNationalityInput"
+                                        placeholder="Enter Your Country" class="form-control"
+                                        list="pkgrelatednationalityDataList"
+                                        onkeyup="dataListValidator(pkgRelInqNationalityInput,nationalityList,'inquiry','nationality', 'countryname'); passCountryCodeInqForm(this,inqClientMobileOnePkgRelForm);">
+
+                                    <datalist id="pkgrelatednationalityDataList"></datalist> -->
+
+                                    <input type="text" id="pkgRelInqNationalitySelect" placeholder="Enter Your Country "
+                                        class="form-control" list="dataListNationality"
+                                        onchange="passCountryCodeInqForm(this, inqClientMobileOnePkgRelForm); dataListValidator(this, 'nationalityList' , 'inquiry' , 'nationality' , 'countryname')">
+
+                                    <datalist id="dataListNationality"></datalist>
+                                    <!-- 
+                                    <select class="form-select rounded-end" aria-label="Default select example"
+                                        id="pkgRelInqNationalitySelect" 
+                                        onchange="passCountryCodeInqForm(this,inqClientMobileOnePkgRelForm);  selectDynamicVal(this,'','inquiry','nationality') ">
+                                    </select> -->
+                                </div>
+
+                                <!-- email -->
+                                <div class="col-6">
+                                    <label class="fw-bold form-label mb-0" for="inqClientEmailPkgRelForm">Email
+                                        :</label>
+                                    <input type="text" class="form-control form-input rounded-end"
+                                        id="inqClientEmailPkgRelForm" placeholder="johndoe@example.com"
+                                        onkeyup="inputFieldValidator(this, '^[A-Za-z0-9\\-\\_]{3,20}[@][a-z]{3,20}[.][a-z]{2,3}$' ,'inquiry' ,'email' )">
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-2">
+                                <!-- contact #1 -->
+                                <div class="col-6">
+                                    <label class="fw-bold form-label mb-0" for="inqClientMobileOnePkgRelForm">Contact
+                                        Number :</label>
+                                    <input type="text" class="form-control form-input rounded-end"
+                                        id="inqClientMobileOnePkgRelForm" placeholder="Please Enter Contact Number"
+                                        onkeyup="inputFieldValidator(this, '^[+][0-9]{7,15}$' ,'inquiry' ,'contactnum' )">
+                                </div>
+
+                                <!-- prefered contact method -->
+                                <div class="col-6">
+                                    <label for="prefContMethodPkgRelForm" class="fw-bold form-label mb-0">Prefered
+                                        contact method</label>
+                                    <select class="form-select rounded-end" aria-label="Default select example"
+                                        onchange="selectStaticVal(this, '' , 'inquiry' , 'prefcontactmethod')"
+                                        id="prefContMethodPkgRelForm">
+                                        <option selected disabled>Prefered contact method</option>
+                                        <option value="Phone Call">Phone call</option>
+                                        <option value="Phone Text">Phone SMS</option>
+                                        <option value="Email">Email</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+
+                                <!-- main enquiry -->
+                                <div class="col-10 mx-auto">
+                                    <!-- <div class="form-floating">
+                                        <label class="form-label fw-bold" for="inqClientEnquiriesPkgRelForm">Enquiries</label>
+                                        <textarea class="form-control"
+                                            placeholder="What can we help you with? Type your question or request here"
+                                            id="inqClientEnquiriesPkgRelForm" style="height: 140px;"
+                                            onkeyup="inputFieldValidator(this, '' ,'inquiry' ,'enquiry' )"></textarea>
+                                       
+                                    </div> -->
+                                    <div class="mb-3">
+                                        <label for="inqClientEnquiriesPkgRelForm"
+                                            class="form-label fw-bold">Enquiries</label>
+                                        <textarea class="form-control" id="inqClientEnquiriesPkgRelForm"
+                                            style="height: 140px;"
+                                            placeholder="What can we help you with? Type your question or request here"
+                                            onkeyup="inputFieldValidator(this, '', 'inquiry', 'enquiry')"></textarea>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="row mt-4 mb-2">
+
+                                <div class="col-3">
+                                    <button type="reset" id="btnClear" class="btn btnall btn-clear fw-bold" onclick="">
+                                        Clear </button>
+                                </div>
+
+                                <div class="col-8 text-end">
+                                    <button id="submitPkgRelatedInqs" type="submit" class="btn btnall btn-add fw-bold"
+                                        onclick="pkgRelInqAddBtn()" style="pointer-events: all;">
+                                        Submit </button>
+                                </div>
+                            </div>
+
+                            <!-- modal for pkg related inqs ENDS -->
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- EXPLORE SECTION -->
+    <div class="hero-section">
+        <h1>Explore the World with Yathra Travels</h1>
+        <p>Discover the best destinations and make unforgettable memories.</p>
+        <button class="btn btn-primary">Learn More</button>
+    </div>
+
+    <!-- GENERAL INQUIRIES -->
+    <section id="generalInquiries" style="background-color: #f0f0f0; padding: 40px 0;">
+        <div class="container">
+            <div class="title text-center mb-4">
+                <h1 class="display-5">General Inquiries</h1>
+                <div class="line mx-auto" style="width: 50px; height: 3px; background-color: #ff6347;"></div>
+            </div>
+
+            <div class="row justify-content-center align-items-center">
+                <!-- left side -->
+                <div class="col-md-6">
+                    <h2>Contact Us</h2>
+                    <p>We're here to help! Whether you have a question about our services, pricing, or anything else,
+                        our team is ready to answer all your questions. Feel free to get in touch with us using the form
+                        on the right.</p>
+                    <img src="resources/images/geninq.jpg" alt="Contact Us" class="img-fluid rounded">
+                </div>
+
+                <!-- right side -->
+                <div class="col-md-6">
+                    <div class="bg-white shadow-sm p-4 rounded">
+
+                        <!-- general form area -->
+                        <form onsubmit="return false" id="generalInqForm">
+                            <div class="row mb-3">
+                                <!-- title -->
+                                <div class="col-md-3">
+                                    <label for="inqClientTitle" class="form-label fw-bold">Title</label>
+                                    <select class="form-select" id="inqClientTitle"
+                                        onchange="selectStaticVal(this, '', 'inquiry', 'clienttitle')">
+                                        <option selected disabled>Select Title</option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Ms">Ms</option>
+                                        <option value="Mrs">Mrs</option>
+                                        <option value="Dr">Dr</option>
+                                        <option value="Prof">Prof</option>
+                                    </select>
+                                </div>
+                                <!-- client name -->
+                                <div class="col-md-9">
+                                    <label for="inqClientName" class="form-label fw-bold">Name</label>
+                                    <input type="text" class="form-control" id="inqClientName" placeholder="John Doe"
+                                        onkeyup="inputFieldValidator(this, '^([A-Z][a-z]{2,30}[\\s])+([A-Z][a-z]{2,30})$', 'inquiry', 'clientname')">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- client's nationality -->
+                                <div class="col-md-6">
+                                    <label for="generalInqNationalitySelect"
+                                        class="form-label fw-bold">Nationality</label>
+
+                                    <input type="text" id="generalInqNationalitySelect"
+                                        placeholder="Enter Your Country " class="form-control"
+                                        list="dataListNationality"
+                                        onchange="passCountryCodeInqForm(this, inqClientMobileOne); dataListValidator(this, 'nationalityList' , 'inquiry' , 'nationality' , 'countryname')">
+
+                                    <datalist id="dataListNationalityGeneral"></datalist>
+                                </div>
+
+                                <!-- email -->
+                                <div class="col-md-6">
+                                    <label for="inqClientEmail" class="form-label fw-bold">Email</label>
+                                    <input type="email" class="form-control" id="inqClientEmail"
+                                        placeholder="johndoe@example.com"
+                                        onkeyup="inputFieldValidator(this, '^[A-Za-z0-9\\-\\_]{3,20}[@][a-z]{3,20}[.][a-z]{2,3}$', 'inquiry', 'email')">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- contact number -->
+                                <div class="col-md-6">
+                                    <label for="inqClientMobileOne" class="form-label fw-bold">Contact Number</label>
+                                    <input type="text" class="form-control" id="inqClientMobileOne"
+                                        placeholder="Please Enter Contact Number"
+                                        onkeyup="inputFieldValidator(this, '^[+][0-9]{7,15}$', 'inquiry', 'contactnum')">
+                                </div>
+
+                                <!-- preferred contact method -->
+                                <div class="col-md-6">
+                                    <label for="prefContMethodGeneralForm" class="form-label fw-bold">Preferred Contact
+                                        Method</label>
+                                    <select class="form-select" id="prefContMethodGeneralForm"
+                                        onchange="selectStaticVal(this, '', 'inquiry', 'prefcontactmethod')">
+                                        <option selected disabled>Preferred contact method</option>
+                                        <option value="Phone Call">Phone call</option>
+                                        <option value="Phone Text">Phone SMS</option>
+                                        <option value="Email">Email</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <!-- main enquiry -->
+                                <label for="inqClientEnquiries" class="form-label">Enquiry :</label>
+                                <textarea class="form-control" id="inqClientEnquiries" rows="4"
+                                    placeholder="What can we help you with? Type your question or request here"
+                                    onkeyup="inputFieldValidator(this, '', 'inquiry', 'enquiry')"></textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="reset" class="btn btn-outline-danger"
+                                    onclick="refreshGeneralInqForm();">Clear</button>
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="generalInqAddBtn();">Submit</button>
+                            </div>
+                        </form>
+
+                        <!-- GENERAL inq form ENDS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-section bg-light border-top py-4" id="contact">
+        <h2 class="fs-4 mb-3">Ready for Your Next Adventure?</h2>
+        <p class="mb-3">Contact us today to plan your dream vacation.</p>
+        <button class="btn btn-primary">Contact Us</button>
+        <div class="mt-3">
+            <p class="mb-1"><strong>Email:</strong> <a href="mailto:info@example.com"
+                    class="text-primary text-decoration-none">info@example.com</a></p>
+            <p class="mb-1"><strong>Phone:</strong> <a href="tel:+1234567890"
+                    class="text-primary text-decoration-none">+1 (234) 567-890</a></p>
+            <p class="mb-1"><strong>Alternate Phone:</strong> <a href="tel:+0987654321"
+                    class="text-primary text-decoration-none">+0 (987) 654-321</a></p>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

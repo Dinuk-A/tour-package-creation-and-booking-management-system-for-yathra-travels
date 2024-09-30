@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+/* .navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px;
+    color: whitesmoke;
+    
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links li {
+    margin: 0px 30px;
+} */
+
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px;
+    color: whitesmoke;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.nav-links {
+    display: flex; /* Align items inline */
+    align-items: center;
+}
+
+.nav-links li {
+    margin: 0 15px; /* Adjust spacing between links */
+}
+
+.nav-links li a {
+    color: whitesmoke;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #fc036b; /* Highlight color on hover */
+    cursor: pointer; /* Pointer cursor */
+}
+
+
+.active {
+    color: #fc036b;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.header {
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../images/sigiriya.jpg);
+    background-position: bottom;
+    background-size: cover;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.header-content {
+    margin-bottom: 150px;
+    color: whitesmoke;
+    text-align: center;
+}
+
+.header-content h1,
+.explore-content h1 {
+    font-size: 7vmin;
+    margin: 50px auto 30px auto;
+}
+
+.header-content h2 {
+    font-size: 4vmin;
+}
+
+.line {
+    width: 150px;
+    height: 4px;
+    background: red;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+.ctn {
+    padding: 8px 15px;
+    background: #fc036b;
+    border-radius: 30px;
+    color: whitesmoke;
+    margin-top: 30px;
+}
+
+section {
+    width: 80%;
+    margin: 80px auto;
+}
+
+.title {
+    text-align: center;
+    font-size: 4vmin;
+    color: darkblue;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.row .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row .col img {
+    width: 80%;
+}
+
+h4,
+p {
+    color: #2274c0;
+}
+
+h4 {
+    font-size: 3vmin;
+    margin: 20px auto;
+}
+
+p {
+    padding: 0px 40px;
+}
+
+.explore {
+    width: 100%;
+    height: 100vh;
+    background-image: url("../images/still-fishing.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+}
+
+.explore-content {
+    width: 60%;
+    padding: 50px;
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.explore-content p {
+    color: white;
+}
+
+.explore-content .line {
+    margin-bottom: 50px;
+}
+
+.card {
+    height: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.card img,
+.card-img-top {
+    border-radius: 10px 10px 0 0;
+    width: 100% !important;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #6c757d;
+}

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{head :: headFragment}"></head>
+
+<head>
+
+    <!-- link main css -->
+    <link rel="stylesheet" href="resources/css/inquiryresponse.css">
+
+    <!-- link vehicle js -->
+    <script src="controllerJS/inquiryresponse.js"></script>
+
+</head>
+
+<body>
+    <main id="mainAreaID" class="main min-vh-100">
+
+        <header th:replace="~{header :: headerFragment}"></header>
+
+        <aside th:replace="~{aside :: asideFragment}"></aside>
+
+        <div th:replace="~{userinfoeditportal :: userInfoEditModalFragment}"></div>
+
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div id="divModify" class=" d-none float-end">
+                    <button type="button" id="btnEdit" style="pointer-events: all;"
+                        onclick="refillInquiryResponseForm(window['editOb'], window['editRow'])"
+                        class="btn btn-warning btn-edit">Edit</button>
+
+                    <button type="button" disabled id="btnDelete" style="pointer-events: all;"
+                        onclick="deleteInquiry(window['editOb'], window['editRow'])"
+                        class="btn btn-danger btn-delete">Delete</button>
+
+                    <button disabled type="button" id="btnPrint" style="pointer-events: all;"
+                        onclick="printInquiry(window['editOb'], window['editRow'])"
+                        class="btn btn-info btn-print">Print</button>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <!-- table area starts -->
+        <div class="row mt-2 ">
+
+            <div class="col-10 mx-auto">
+                <div class="card card-body bg-info bg-opacity-25 mx-auto ">
+
+                    <!-- table starts -->
+                    <table id="inqResponseTable" class="table table-bordered table-striped border-warning  ">
+
+                        <thead class="table-primary ">
+
+                            <th class="text-center">No.</th>
+                            <th class="text-center">Code</th>
+                            <th class="text-center">Source</th>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Client Name</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Modify</th>
+
+                        </thead>
+
+                        <tbody class="table-light align-middle">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- modal starts -->
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="modalInquiryResponse" tabindex="-1">
+
+            <div class="modal-dialog modal-xl" style="min-width: 1000px;">
+
+                <div class="modal-content border-warning">
+
+                    <!-- modal header -->
+                    <div class="modal-header bg-dark">
+                        <h3 class="modal-title fw-bold text-warning" id="staticBackdropLabel">Inquiry Responses
+                            Management Form
+                        </h3>
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            onclick="window.location.reload(); changeIsOnWorking();"></button>
+                    </div>
+
+                    <!-- modal body -->
+                    <div class="modal-body">
+                        <div class="container-fluid">
+
+                            <form id="formInquiryResponse" onsubmit="return false">
+
+                                <!-- accordion 1 for Inquiry info (MAIN INQ)-->
+                                <div class="w-100 border accordion accordion-flush " id="accordionForInquiryDetails">
+                                    <div class="accordion-item pb-2 px-1">
+                                        <h4 class="accordion-header mb-0">
+                                            <button class="p-1 accordion-button fw-bold " type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flushCollapsInqDetails"
+                                                aria-expanded="false" aria-controls="flushCollapsInqDetails">
+                                                <h4 class="text-primary fw-bold">Main Inquiry Details : Click To View
+                                                </h4>
+                                            </button>
+                                        </h4>
+
+                                        <div id="flushCollapsInqDetails" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionForInquiryDetails">
+                                            <div class="accordion-body">
+
+                                                <!-- Inquiry Information row 1-->
+                                                <div class="row">
+
+                                                    <!-- Inquiry code -->
+                                                    <div class="col-3">
+                                                        <label for="inqCodeInput" class="form-label mb-0">Inquiry
+                                                            Code:</label>
+                                                        <input disabled id="inqCodeInput"
+                                                            class="form-control form-input"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'inqcode')">
+                                                    </div>
+
+                                                    <!--Source -->
+                                                    <div class="col-3">
+                                                        <label for="inqRecievedMethod" class="form-label mb-0">Source
+                                                            :</label>
+
+                                                        <select id="inqRecievedMethod"
+                                                            class="form-control form-select mb-0"
+                                                            onchange="selectStaticVal(this, '' , 'inquiry' , 'recievedmethod'); ">
+                                                            <option value="" selected disabled>Select Source</option>
+                                                            <option value="Phone Call">Phone Call</option>
+                                                            <option value="Email">Email</option>
+                                                            <option value="Website">Website</option>
+                                                            <option value="In-person">in-person</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Recieved Date  -->
+                                                    <div class="col-3">
+                                                        <label for="inqRecievedDate" class="form-label mb-0">Recieved
+                                                            Date
+                                                            :</label>
+
+                                                        <input id="inqRecievedDate" class="form-control form-input "
+                                                            type="date"
+                                                            onchange="inputFieldValidator(this, '' , 'inquiry' , 'recieveddate')">
+                                                    </div>
+
+                                                    <!-- recieved time -->
+                                                    <div class="col-3">
+                                                        <label for="inqRecievedTime" class="form-label mb-0">Recieved
+                                                            Time
+                                                            :</label>
+
+                                                        <input id="inqRecievedTime" class="form-control form-input"
+                                                            type="time"
+                                                            onchange="inputFieldValidator(this, '' , 'inquiry' , 'recievedtime')">
+                                                    </div>
+
+                                                </div>
+                                                <!-- Inquiry Information row 1 ends-->
+
+                                                <!-- inquiry information row 2 -->
+                                                <div class="row mt-2">
+
+                                                    <!-- inq type -->
+                                                    <div class="col-3">
+                                                        <label for="inqType" class="form-label mb-0">Inquiry Type
+                                                            :</label>
+                                                        <select id="inqType" class="form-control form-select"
+                                                            onchange="selectStaticVal(this,'','inquiry','inqtype'); ifInqTypeIsGeneral(); ">
+                                                            <option value="General">General</option>
+                                                            <option value="Package-Related">Package-Related</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-2"></div>
+
+                                                    <!-- interested package -->
+                                                    <div class="col-7">
+                                                        <label for="inqInterestedPkg" class="form-label mb-0">Interested
+                                                            Package :</label>
+                                                        <select disabled id="inqInterestedPkg"
+                                                            class="form-control form-select"
+                                                            onchange="selectDynamicVal(this,'','inquiry','based_tpkg_id')">
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <!-- inquiry information row 2 ends-->
+
+                                                <!-- inquiry information row 3 -->
+                                                <div class="row mt-2">
+
+                                                    <!-- Enquiry main Text -->
+                                                    <div class="col-8">
+                                                        <label for="inqMainEnquiry" class="form-label mb-0">Recieved
+                                                            Enquiry
+                                                            :</label>
+
+                                                        <textarea class="form-control" placeholder=" "
+                                                            id="inqMainEnquiry" style="height: 180px;"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'enquiry')"></textarea>
+                                                    </div>
+
+                                                    <!-- prefered contact method -->
+                                                    <div class="col-4 ">
+                                                        <label for="inqPrefferedContactMethod"
+                                                            class="form-label mb-0">prefered
+                                                            Contact
+                                                            Method:</label>
+
+                                                        <select id="inqPrefferedContactMethod" disabled
+                                                            class="form-control form-select mb-2"
+                                                            onchange="selectStaticVal(this, '' , 'inquiry' , 'prefcontactmethod')">
+                                                            <option selected disabled value="">Please Select</option>
+                                                            <option value="Phone Call">Phone Call</option>
+                                                            <option value="Phone Text">Phone Text</option>
+                                                            <option value="Email">Email</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <!-- inquiry information row 3 ends-->
+
+                                                <div class="row">
+                                                    <h4 class="border-bottom border-primary fw-bold text-info mt-4">
+                                                        Additional Information</h4>
+                                                </div>
+
+                                                <!-- inquiry information row 4 -->
+                                                <div class="row mt-3 mx-auto">
+                                                    <!-- number of travellers -->
+                                                    <div class="col-7 p-1 border border-warning p-2">
+                                                        <h5 class="text-info border-bottom">Number of Travellers</h5>
+
+                                                        <div class="row mt-1">
+                                                            <!-- local adults count -->
+
+                                                            <div class="col-3">
+                                                                <label for="inqLocalAdultCountInput"
+                                                                    class="form-label mb-0">Local Adults
+                                                                    :</label>
+                                                                <input type="number" value="0" class="form-control"
+                                                                    id="inqLocalAdultCountInput"
+                                                                    onkeyup="inputFieldValidator(this, '^[1-9]{1,3}$' ,'inquiry' , 'inqlocaladultcount');   ">
+
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <!-- local children count -->
+                                                                <label for="inqLocalChildCountInput"
+                                                                    class="form-label mb-0">Local Children
+                                                                    :</label>
+                                                                <input type="number" value="0" class="form-control"
+                                                                    id="inqLocalChildCountInput"
+                                                                    onkeyup="inputFieldValidator(this, '^[1-9]{1,3}$' ,'inquiry' , 'inqlocalchildcount');  ">
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <!-- foreign adults count -->
+                                                                <label for="inqForeignAdultCountInput"
+                                                                    class="form-label mb-0">Foreign Adults
+                                                                    :</label>
+                                                                <input type="number" value="0" class="form-control"
+                                                                    id="inqForeignAdultCountInput"
+                                                                    onkeyup="inputFieldValidator(this, '^[1-9]{1,3}$' ,'inquiry' , 'inqforeignadultcount');  ">
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <!-- foreign children count -->
+                                                                <label for="inqForeignChildCountInput"
+                                                                    class="form-label mb-0">Foreign Children
+                                                                    :</label>
+                                                                <input type="number" value="0" class="form-control"
+                                                                    id="inqForeignChildCountInput"
+                                                                    onkeyup="inputFieldValidator(this, '^[1-9]{1,3}$' ,'inquiry' , 'inqforeignchildcount'); ">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- dates -->
+                                                    <div class="col-2"></div>
+                                                    <div class="col-3">
+                                                        <div class="row mt-2">
+                                                            <div class="col-12">
+
+                                                                <!-- arrival date -->
+                                                                <label for="inqArrivalDate"
+                                                                    class="form-label mb-1">Possible Tour Start
+                                                                    date</label>
+                                                                <input type="date" id="inqArrivalDate"
+                                                                    class="form-control form-input"
+                                                                    onchange="inputFieldValidator(this,'', 'inquiry' , 'arrivaldate')">
+                                                            </div>
+                                                            <!-- departure date -->
+                                                            <!-- <div class="col-6"> -->
+
+                                                            <!-- <label for="InqDeptDate"
+                                                                    class="form-label mb-1">departure
+                                                                    date</label>
+                                                                <input type="date" id="InqDeptDate"
+                                                                    class="form-control form-input"
+                                                                    onchange="inputFieldValidator(this,'', 'inquiry' , 'departuredate')"> -->
+                                                            <!-- </div> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- inquiry information row 4 ends-->
+
+                                                <!-- inquiry information row 5 -->
+                                                <div class="row mt-2 mx-auto">
+
+                                                    <!-- pickup location -->
+                                                    <div class="col-4">
+                                                        <label for="inqPickupLoc" class="form-label mt-1">Pickup
+                                                            Location
+                                                            :</label>
+
+                                                        <textarea class="form-control" placeholder=" " id="inqPickupLoc"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'pickuplocation')"
+                                                            style="height: 100px;"></textarea>
+                                                    </div>
+
+                                                    <!-- dropoff location -->
+                                                    <div class="col-4">
+                                                        <label for="onqDropOffLock" class="form-label mt-1">Dropoff
+                                                            Location
+                                                            :</label>
+
+                                                        <textarea class="form-control" placeholder=" "
+                                                            id="onqDropOffLock"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'dropofflocation')"
+                                                            style="height: 100px;"></textarea>
+                                                    </div>
+
+                                                    <!-- guide status -->
+                                                    <div class="col-4 p-1 border border-info">
+                                                        <h5 class="text-info border-bottom">Guide </h5>
+
+                                                        <div class="row mt-1">
+                                                            <div class="input-group my-auto">
+                                                                <!-- CB 1 -->
+                                                                <input type="radio" class="btn-check" id="guideYes"
+                                                                    autocomplete="off" name="guideNeedOrNot" onchange="if (this.checked) {
+                                                                        inquiry.isguideinclude = true;
+                                                                        }else{
+                                                                        inquiry.isguideinclude = false;
+                                                                        }">
+
+                                                                <label
+                                                                    class="btn btn-outline-btn btn-outline-success rounded-start"
+                                                                    for="guideYes" style="width:45%">
+                                                                    Need a Guide
+                                                                </label>
+
+                                                                <!--CB 2  -->
+                                                                <input type="radio" class="btn-check" id="guideNo"
+                                                                    autocomplete="off" name="guideNeedOrNot" onchange="if (this.checked) {
+                                                                        inquiry.isguideinclude = false;
+                                                                        }else{
+                                                                        inquiry.isguideinclude = true;
+                                                                        }">
+
+                                                                <label class="ms-1 btn btn- btn btn-outline-warning "
+                                                                    for="guideNo" style="width:45%">Guide Not Needed
+                                                                </label>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                 <!-- inquiry information row 5 ends-->
+
+                                                <!-- customized package for this inquiry -->
+                                                <div class="row mt-4">
+                                                    <div class="col-4">
+                                                        <label for="customizedPackage" class="form-label">Final
+                                                            Customized Package
+                                                            :</label>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <select id="customizedPackage" class="form-control form-select"
+                                                            onchange="selectDynamicVal(this,'','inquiry','cus_tpkg_id')">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <!-- customized package for this inquiry row ends -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--accordion 1 end -->
+
+                                <!-- accordion 2 for client info -->
+                                <div class="mb-2 w-100 border accordion accordion-flush mt-2"
+                                    id="accordionForInquiryClientInfo">
+
+                                    <div class="accordion-item pb-2 px-1">
+
+                                        <h4 class="accordion-header mb-0">
+
+                                            <button class="p-1 accordion-button collapsed fw-bold " type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flushCollapsInqClientInfo"
+                                                aria-expanded="false" aria-controls="flushCollapsInqClientInfo">
+
+                                                <h4 class="text-primary fw-bold"> Client Details : Click to view</h4>
+                                            </button>
+                                        </h4>
+
+
+                                        <div id="flushCollapsInqClientInfo" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionForInquiryClientInfo">
+                                            <div class="accordion-body bg-light ">
+
+                                                <!-- Client info -->
+                                                <div class="row">
+
+                                                    <!-- title -->
+                                                    <div class="col-2">
+                                                        <label for="inqClientTitle" class="form-label mb-0">
+                                                            Title :</label>
+                                                        <input id="inqClientTitle" class="form-control form-input"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'clienttitle')">
+                                                    </div>
+
+
+
+                                                    <!-- client name -->
+                                                    <div class="col-4">
+                                                        <label for="inqClientName" class="form-label mb-0">Client
+                                                            Name :</label>
+                                                        <input id="inqClientName" class="form-control form-input"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'clientname')">
+                                                    </div>
+
+                                                    <!-- nationality original-->
+                                                    <div class="col-3">
+                                                        <label for="InqClientNationality"
+                                                            class="form-label mb-0">Nationality
+                                                            :</label>
+
+                                                        <input type="text" id="InqClientNationality"
+                                                            placeholder="Enter Cient's Country" class="form-control"
+                                                            list="dataListNationality"
+                                                            onkeyup="dataListValidator(this, 'nationalityList' , 'inquiry' , 'nationality' , 'countryname'); changeLable();">
+                                                        <datalist id="dataListNationality"></datalist>
+
+                                                    </div>
+
+                                                    <!-- passport OR nic num -->
+                                                    <div class="col-3">
+                                                        <label id="lblForNICorPpt" for="inqClientPassportNumorNIC"
+                                                            class="form-label mb-0">Passport
+                                                            or NIC
+                                                            :</label>
+
+                                                        <input id="inqClientPassportNumorNIC"
+                                                            class="form-control form-input"
+                                                            onkeyup="filterClient(); inputFieldValidator(this,'', 'inquiry' , 'passportnumornic')">
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- client info 2 -->
+                                                <div class="row mt-2">
+                                                    <!-- contact #1 -->
+                                                    <div class="col-3">
+                                                        <label for="inqContactOne" class="form-label mb-0">Contact
+                                                            #1:</label>
+
+                                                        <input id="inqContactOne" class="form-control form-input"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'contactnum')">
+                                                    </div>
+
+                                                    <!-- additional contact -->
+                                                    <div class="col-3">
+                                                        <label for="inqAdditionalContact"
+                                                            class="form-label mb-0">Contact
+                                                            #2:</label>
+
+                                                        <input id="inqAdditionalContact" class="form-control form-input"
+                                                            onkeyup="sameContactError(); ">
+                                                        <!--  inputFieldValidator(this,'', 'inquiry' , 'contactnumtwo'); -->
+                                                    </div>
+
+                                                    <div class="col-2"></div>
+
+                                                    <!-- email -->
+                                                    <div class="col-4">
+                                                        <label for="inqClientEmail" class="form-label mb-0">Email:
+                                                        </label>
+
+                                                        <input id="inqClientEmail" class="form-control form-input"
+                                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'email')">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--accordion 2 end -->
+
+                                <!-- accordion 3 for responses -->
+                                <div class="mb-2 w-100 border accordion accordion-flush mt-2"
+                                    id="accordionForInquiryResponses">
+
+                                    <div class="accordion-item ">
+
+                                        <h4 class="accordion-header">
+
+                                            <button class="p-1 accordion-button fw-bold " type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flushCollapsInqResponses"
+                                                aria-expanded="false" aria-controls="flushCollapsInqResponses">
+
+                                                <h4 class="text-primary fw-bold"> Responses : Click to view</h4>
+                                            </button>
+                                        </h4>
+
+                                        <div id="flushCollapsInqResponses" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionForInquiryResponses">
+                                            <div class="accordion-body bg-light ">
+
+                                                <!-- show previously submittede responses -->
+                                                <div class="row" id="submittedAllResponses"></div>
+
+                                                <!-- button to add new responses -->
+                                                <div class="row mt-2">
+                                                    <button id="createNewResponseRowBtn"
+                                                        class="btn btn-primary mx-auto w-25"
+                                                        onclick="createNewResponseRecord();">Add a new
+                                                        Response</button>
+                                                </div>
+
+                                                <!-- section to add new responses -->
+                                                <div class="row mt-4" id="submittedResponses">
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--accordion 3 end -->
+
+                                <!-- row for status and note -->
+                                <div class="row border p-1 mb-1 mx-auto">
+                                    <!-- inq note -->
+                                    <div class="col-5">
+                                        <label for="inqNote" class="form-label mb-0">Note:
+                                            :</label>
+                                        <textarea class="form-control" placeholder=" " id="inqNote"
+                                            style="height: 100px;"
+                                            onkeyup="inputFieldValidator(this,'', 'inquiry' , 'note')"></textarea>
+                                    </div>
+
+                                    <!-- inq status -->
+                                    <!-- <div class="col-4">
+                                        <label for="inqStatus" class="form-label mb-0">Inquiry Status
+                                            :</label>
+
+                                        <select id="inqStatus" class="form-control form-select mb-2"
+                                            onchange="selectDynamicVal(this,'','inquiry','inquirystatus')">
+                                        </select>
+
+
+
+                                    </div> -->
+                                </div>
+                                <!-- row for status and note end -->
+
+                                <!--3 form buttons starts -->
+                                <div class="row mt-3">
+
+                                    <div class="col-3">
+                                        <!-- <button type="reset" class="btn btn-all btn-clear" onclick="">Clear</button> -->
+                                    </div>
+
+                                    <div class="col-9 text-end">
+                                        <button type="reset" class="btn btn-all btn-clear" onclick="">Clear</button>
+
+                                        <button type="submit" id="inqManualAddBtn" class="btn btn-all btn-add "
+                                            onclick="updateInqAndResponses();"
+                                            style="pointer-events: all;">Update</button>
+
+
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+
+    </main>
+</body>
+
+</html>
