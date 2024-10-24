@@ -1,0 +1,7 @@
+Copyright Dinuka Pramod Kavinda 2024
+
+All rights reserved. This code is made available for review and viewing purposes only. Redistribution, modification, or use of the code, in part or in full, is strictly prohibited without the express written consent of the copyright holder.
+
+This repository is intended solely for interviewers or evaluators. It cannot be used, copied, or modified by anyone else for any purpose.
+
+For inquiries, please contact dinukah98@gmail.com 
